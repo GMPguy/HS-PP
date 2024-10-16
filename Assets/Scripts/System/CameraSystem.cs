@@ -20,7 +20,7 @@ public static class CameraSystem  {
 
         if (mainCamera == null) {
 
-            GameObject newCamera = Resources.Load<GameObject>("Prefabs/MainCamera");
+            GameObject newCamera = Object.Instantiate(Resources.Load<GameObject>("Prefabs/MainCamera"));
             mainCamera = newCamera.GetComponent<Camera>();
             cameraTransform = newCamera.transform;
 

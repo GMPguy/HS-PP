@@ -8,14 +8,14 @@ public class StaticController : MonoBehaviour {
 
     void Start() {
         
-        if (FindObjectOfType<StaticController>())
+        if (FindObjectsOfType<StaticController>().Length > 1)
             Destroy(gameObject);
         else
             DontDestroyOnLoad(gameObject);
 
     }
 
-    void CustomLateUpdate () =>
+    void LateUpdate () =>
         CameraSystem.CustomLateUpdate(Time.deltaTime);
 
 }
