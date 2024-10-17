@@ -16,4 +16,9 @@ public static class Enums {
         FPP
     }
 
+    public enum ItemType {
+        Regular,
+        Gun
+    }
+
 }

@@ -1,11 +1,13 @@
 using UnityEngine;
 using static Enums;
+using Unity.Mathematics;
 
 public static class CameraSystem  {
 
     // Controlling variables
+    static public float2 ZoomIn;
     static CameraLogic cameraType = CameraLogic.FPP;
-    static float TurnX, TurnY;
+    static public float turnX, turnY;
 
     // Camera references
     static Camera mainCamera;
@@ -58,13 +60,23 @@ public static class CameraSystem  {
             return;
 
         // Look around
-        TurnY += Input.GetAxis("Mouse X");
-        TurnX = Mathf.Clamp(TurnX + Input.GetAxis("Mouse Y"), -80f, 80f );
+        turnY += Input.GetAxis("Mouse X") * SettingsSystem.CameraSensitivity;
+        turnX = Mathf.Clamp(
+            turnX + Input.GetAxis("Mouse Y") * SettingsSystem.InvertedAxisY * SettingsSystem.CameraSensitivity,
+             -80f, 80f 
+        );
+
+        // Field of view
+        mainCamera.fieldOfView = Mathf.Lerp(
+            SettingsSystem.FOV,
+            ZoomIn.x,
+            ZoomIn.y
+        );
 
         // Set transforms
         cameraTransform.SetPositionAndRotation(
             camTarget.position + Vector3.up * 1.75f, 
-            Quaternion.Euler(TurnX, TurnY, 0f)
+            Quaternion.Euler(turnX, turnY, 0f)
         );
     }
 
