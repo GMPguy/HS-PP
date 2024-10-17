@@ -96,13 +96,12 @@ public class PlayerController : MonoBehaviour {
             equipment.ChangeItem(4, 0);
         else if (Input.mouseScrollDelta.y != 0f)
             equipment.ChangeItem((int)Input.mouseScrollDelta.y, 1);
+        else if (Input.GetKeyDown(KeyCode.H))
+            equipment.ChangeItem(0, -1);
 
         // Item functions
-        if (Input.GetButton("Fire"))
-            equipment.Fire();
-
-        if (Input.GetButton("AltFire"))
-            equipment.AltFire();
+        equipment.Fire();
+        equipment.AltFire();
     }
 
 }

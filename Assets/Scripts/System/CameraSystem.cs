@@ -1,6 +1,7 @@
 using UnityEngine;
 using static Enums;
 using Unity.Mathematics;
+using UnityEngine.Assertions;
 
 public static class CameraSystem  {
 
@@ -13,6 +14,11 @@ public static class CameraSystem  {
     static Camera mainCamera;
     static Transform cameraTransform;
 
+    static Transform itemHeldModel;
+    static Animator itemHeldAnim;
+    static AudioSource itemheldSounds;
+    static SoundBankConfig itemHeldSoundBank;
+
     // Main variables
     static Transform camTarget;
     static Vector3 camPosition;
@@ -22,9 +28,19 @@ public static class CameraSystem  {
 
         if (mainCamera == null) {
 
+            // Spawn camera
             GameObject newCamera = Object.Instantiate(Resources.Load<GameObject>("Prefabs/MainCamera"));
             mainCamera = newCamera.GetComponent<Camera>();
             cameraTransform = newCamera.transform;
+
+            // Spawn arm model
+            GameObject newItem = Object.Instantiate(Resources.Load<GameObject>("Prefabs/ItemHeldModel"));
+            itemHeldAnim = newItem.GetComponent<Animator>();
+            itemheldSounds = newItem.GetComponent<AudioSource>();
+            itemHeldModel = newItem.transform;
+            itemHeldModel.SetParent(cameraTransform);
+            itemHeldModel.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+            itemHeldSoundBank = Resources.Load<SoundBankConfig>("Configs/ItemHeldSounds");
 
         } else {
 
@@ -49,6 +65,34 @@ public static class CameraSystem  {
         cameraType = newType;
         camTarget = newTarget;
 
+        // RemoveItemHeldModel
+        itemHeldModel.localScale = newType == CameraLogic.FPP ? Vector3.one : Vector3.zero;
+
+    }
+
+    /// <summary>
+    /// If FPP camera is in use, this function will play ItemHeldModel's animation and sound
+    /// </summary>
+    public static void FPPanimation (string animationName, string animationSound = default) {
+        itemHeldAnim.Play(animationName, 0, 0f);
+
+        if (animationSound != default) {
+            itemheldSounds.clip = itemHeldSoundBank.GetSound(animationSound);
+            itemheldSounds.Play();
+        }
+    }
+
+    /// <summary>
+    /// If player is alive, and they change their item, we change the ItemHeldModel item model
+    /// </summary>
+    public static void FPPmodelSet (string modelName) {
+        //Assert.IsNull(itemHeldModel, "Tried to set model to a non-existing ItemHeldModel");
+
+        // Find desired model, and set it's activity to either true or false
+        for (int fm = 0; fm < itemHeldModel.GetChild(0).childCount; fm++) {
+            GameObject checkModel = itemHeldModel.GetChild(0).GetChild(fm).gameObject;
+            checkModel.SetActive(checkModel.name == modelName);
+        }
     }
 
     /// <summary>

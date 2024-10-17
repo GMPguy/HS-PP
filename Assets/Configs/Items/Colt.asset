@@ -18,6 +18,9 @@ MonoBehaviour:
   MaxAmmo: 8
   Cooldown: 0.5
   PulloutTime: 1
+  Animation_Pullout: Colt_Pullout
+  Animation_Fire: Colt_Fire
+  FireMode: 1
   Damage:
     x: 5
     y: 10

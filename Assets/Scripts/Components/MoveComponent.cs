@@ -14,13 +14,13 @@ public class MovementComponent : MonoBehaviour {
     TriggerComponent GroundDetector;
 
     Rigidbody rig;
-    CapsuleCollider collider;
+    CapsuleCollider col;
     PhysicMaterial physMat;
 
     void Start () {
         rig = GetComponent<Rigidbody>();
-        collider = GetComponent<CapsuleCollider>();
-        physMat = collider.material;
+        col = GetComponent<CapsuleCollider>();
+        physMat = col.material;
     }
 
     /// <summary>

@@ -11,4 +11,6 @@ public class ItemConfig : ScriptableObject {
     public float Cooldown;
     public float PulloutTime;
 
+    public string Animation_Pullout;
+
 }

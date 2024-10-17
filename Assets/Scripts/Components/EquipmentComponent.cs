@@ -1,25 +1,27 @@
+using Unity.Mathematics;
 using UnityEngine;
 using static Enums;
+using Random = UnityEngine.Random;
 
 public class EquipmentComponent : MonoBehaviour {
 
     /// <summary>
     /// This class contains ItemConfig data, that needs a local copy,
-    /// , or needs to be called more easily, for the equipment, f.e.: ammo
+    /// or needs to be called more easily, for the equipment, f.e.: ammo
     /// </summary>
     public class Item {
         public ItemConfig ConfigRef;
         public bool Acquired;
         public int Ammo;
-        public float PulloutTime;
     }
 
     // Main variables
     public Item[] Equipment;
-    public int CurrentItem;
+    public int CurrentItem = -1;
 
-    public float pulloutCooldown;
-    public float cooldown;
+    float pulloutCooldown;
+    float cooldown;
+    float2 delay;
 
     // Gun variables
     float recoil;
@@ -31,28 +33,28 @@ public class EquipmentComponent : MonoBehaviour {
         cooldown -= cooldown > 0 ? Time.deltaTime : 0;
         pulloutCooldown -= pulloutCooldown > 0 ? Time.deltaTime : 0;
 
-        recoil -= cooldown > 0 ? Time.deltaTime : 0;
+        recoil -= cooldown <= 0 ? Time.deltaTime : 0;
+        delay.x = Mathf.MoveTowards(delay.x, delay.y, Time.deltaTime);
     }
 
     /// <summary>
     /// Use this function to check which item is held, and use it's main function
     /// </summary>
     public void Fire () {
-        if (cooldown > 0f || pulloutCooldown > 0f)
+        if (pulloutCooldown > 0f || CurrentItem < 0)
             return;
 
         Item item = Equipment[CurrentItem];
 
         switch (item.ConfigRef.TypeOfItem) {
             case ItemType.Gun:
-                GunConfig config = (GunConfig)item.ConfigRef;
-                cooldown = config.Cooldown;
-                Debug.Log("Bang! " + recoil);
-                recoil = Mathf.Clamp01(recoil + config.RecoilTime);
+                Fire_Gun(item);
+                break;
+            case ItemType.Knife:
+                Fire_Knife();
                 break;
             default:
-                Debug.Log("Dunno what's this, but it's called " + item.ConfigRef.EnglishName);
-                cooldown = item.ConfigRef.Cooldown;
+                Debug.LogError("No fire code for TypeOfItem " + item.ConfigRef.TypeOfItem);
                 break;
         }
     }
@@ -61,7 +63,7 @@ public class EquipmentComponent : MonoBehaviour {
     /// Use this function to check which item is held, and use it's main function
     /// </summary>
     public void AltFire () {
-        if (cooldown > 0f || pulloutCooldown > 0f)
+        if (pulloutCooldown > 0f || CurrentItem < 0)
             return;
     }
 
@@ -73,19 +75,51 @@ public class EquipmentComponent : MonoBehaviour {
         if (cooldown > 0f)
             return;
 
+        // Holster weapon
+        if (what == -1) {
+            pulloutCooldown = cooldown = 0f;
+            CurrentItem = -1;
+            CameraSystem.FPPanimation("Template");
+            CameraSystem.FPPmodelSet("");
+            return;
+        }
+
+        // Pull out weapon
         int newID = what switch {
             1 => CurrentItem + itemID,
             _ => itemID
         };
 
         newID = (Equipment.Length + newID) % Equipment.Length;
+
+        // If item is not acquired, prevent player from changing to it
+        if (!Equipment[newID].Acquired) {
+            if (what == 0)
+                return;
+            else {
+                for (int cfa = newID + 1; cfa != newID; cfa = (Equipment.Length + cfa + 1) % Equipment.Length)
+                    if (Equipment[cfa].Acquired) {
+                        newID = cfa;
+                        break;
+                    }
+            }
+        }
+
+        // Don't pull out the current weapon
+        if (newID == CurrentItem)
+            return;
         
         CurrentItem = newID;
-        pulloutCooldown = Equipment[newID].PulloutTime;
+        pulloutCooldown = itemData[newID].PulloutTime;
+
         cooldown = 0f;
+        delay = float2.zero;
+
+        CameraSystem.FPPanimation(itemData[newID].Animation_Pullout);
+        CameraSystem.FPPmodelSet(itemData[newID].EnglishName);
     }
 
-    void Awake () {
+    void Start () {
         Equipment = new Item[itemData.Length];
 
         // Copy data from item configs into Item array
@@ -93,12 +127,54 @@ public class EquipmentComponent : MonoBehaviour {
             ItemConfig config = itemData[gi];
 
             Equipment[gi] = new Item {
+                Acquired = true,
                 ConfigRef = config,
-                Ammo = config.MaxAmmo,
-                PulloutTime = config.PulloutTime
+                Ammo = config.MaxAmmo
             };
         }
 
+        ChangeItem(0, -1);
+    }
+
+    /// <summary>
+    /// This function is used for items, that are guns. You can shoot with them
+    /// </summary>
+    void Fire_Gun(Item item) {
+        if (cooldown > 0f)
+            return;
+
+        GunConfig config = (GunConfig)item.ConfigRef;
+
+        bool firePermission = 
+        ((int)config.FireMode <= 1 && Input.GetButtonDown("Fire")) || 
+        ((int)config.FireMode > 1 && Input.GetButton("Fire"));
+
+        if (firePermission) {
+            cooldown = config.Cooldown;
+            Debug.Log("Bang! " + recoil);
+            recoil = Mathf.Clamp01(recoil + config.RecoilTime);
+            CameraSystem.FPPanimation(config.Animation_Fire);
+        }
+    }
+
+    /// <summary>
+    /// Use this when using a knife
+    /// </summary>
+    void Fire_Knife () {
+        if (delay.x >= .5f) {
+            Debug.Log("Chop");
+            delay = float2.zero;
+        }
+
+        if (cooldown > 0f)
+            return;
+        
+        if (Input.GetButtonDown("Fire")) {
+            int chooseAnimation  = (int)Random.Range(1f, 3.9f);
+            CameraSystem.FPPanimation("Knife_Attack" + chooseAnimation);
+            cooldown = 1f;
+            delay = new float2(0f, .5f);
+        }
     }
 
 }

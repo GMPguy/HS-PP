@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EnglishName: Knife
   PolishName: "N\xF3\u017C"
-  TypeOfItem: 0
+  TypeOfItem: 2
   MaxAmmo: 0
-  Cooldown: 0.5
+  Cooldown: 1
   PulloutTime: 1
+  Animation_Pullout: Knife_Pullout

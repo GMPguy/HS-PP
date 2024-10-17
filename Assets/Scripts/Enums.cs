@@ -18,7 +18,14 @@ public static class Enums {
 
     public enum ItemType {
         Regular,
-        Gun
+        Gun,
+        Knife
+    }
+
+    public enum GunFireMode {
+        BoltAction,
+        SemiAuto,
+        Automatic
     }
 
 }

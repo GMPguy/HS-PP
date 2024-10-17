@@ -128,9 +128,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentItem: 0
+  pulloutCooldown: 0
+  cooldown: 0
   itemData:
   - {fileID: 11400000, guid: c526aa61e4526734d9478f1681f2c440, type: 2}
   - {fileID: 11400000, guid: 0f899b41cb673f8418c8a708e34edde4, type: 2}
+  - {fileID: 11400000, guid: d733d8e77f1ef684583931826adfa321, type: 2}
 --- !u!1 &2183114494850347573
 GameObject:
   m_ObjectHideFlags: 0
