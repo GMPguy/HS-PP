@@ -4,7 +4,15 @@ using static Enums;
 
 public class PlayerController : MonoBehaviour {
 
-    // Main variables
+    [SerializeField]
+    bool Recall = false;
+
+    void Start () {
+        if (Recall)
+            PlayerSystem.RecallPlayer(transform);
+    }
+
+    /*// Main variables
     PlayerState playerState = PlayerState.Alive;
     int prevState = -1;
     
@@ -102,6 +110,6 @@ public class PlayerController : MonoBehaviour {
         // Item functions
         equipment.Fire();
         equipment.AltFire();
-    }
+    }*/
 
 }

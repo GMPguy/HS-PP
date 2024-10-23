@@ -1,18 +1,129 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using static Enums;
 
-public class PlayerSystem : MonoBehaviour
-{
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+public static class PlayerSystem {
+
+    // Main variables
+    public static Transform Player;
+
+    static PlayerState playerState = PlayerState.Alive;
+    static int prevState = -1;
+
+    // References
+    public static MovementComponent move;
+    public static EquipmentComponent equipment;
+
+    /// <summary>
+    /// Use this function to set Player references pased on scene object
+    /// </summary>
+    public static void RecallPlayer (Transform newPlayer) {
+
+        if (Player)
+            DisposePlayer();
+
+        Player = newPlayer;
+
+        move = Player.GetComponent<MovementComponent>();
+        equipment = Player.GetComponent<EquipmentComponent>();
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    /// <summary>
+    /// Use this function to get rid of referenced Player, and their references
+    /// </summary>
+    public static void DisposePlayer () {
+
+        if (!Player)
+            return;
+
+        GameObject.Destroy(Player);
+        move = null;
+        equipment = null;
+
     }
+
+    public static void CustomUpdate () {
+
+        // If state was changed, trigger the state change function
+        if (prevState != (int)playerState) 
+            StateChange(playerState);
+
+        // Trigger different functions, depending on the player's state
+        switch (playerState) {
+
+            case PlayerState.Alive:
+                Movement();
+                EquipmentControl();
+                break;
+
+            default:
+                break;
+
+        }
+
+    }
+
+    /// <summary>
+    /// If player's state is changed, do some code
+    /// </summary>
+    static void StateChange(PlayerState newState) {
+        playerState = newState;
+        prevState = (int)playerState;
+
+        switch (newState) {
+            case PlayerState.Alive:
+                CameraSystem.ChangeCamera(CameraLogic.FPP, Player);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// This function uses Input system, to control the movement
+    /// </summary>
+    static void Movement() {
+
+        Player.rotation = Quaternion.Euler(0f, CameraSystem.turnY, 0f);
+
+        switch (move.CurrentMovementType) {
+            case MovementType.Normal:
+                move.Slide( new Vector2(
+                    Input.GetAxis("Vertical"),
+                    Input.GetAxis("Horizontal")
+                ));
+
+                if (Input.GetButton("Jump"))
+                    move.Jump();
+
+                break;
+        }
+
+    }
+
+    /// <summary>
+    /// This function allows us to use weapons
+    /// </summary>
+    static void EquipmentControl() {
+        equipment.CustomUpdate();
+
+        // Change item
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+            equipment.ChangeItem(0, 0);
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+            equipment.ChangeItem(1, 0);
+        else if (Input.GetKeyDown(KeyCode.Alpha3))
+            equipment.ChangeItem(2, 0);
+        else if (Input.GetKeyDown(KeyCode.Alpha4))
+            equipment.ChangeItem(3, 0);
+        else if (Input.GetKeyDown(KeyCode.Alpha5))
+            equipment.ChangeItem(4, 0);
+        else if (Input.mouseScrollDelta.y != 0f)
+            equipment.ChangeItem((int)Input.mouseScrollDelta.y, 1);
+        else if (Input.GetKeyDown(KeyCode.H))
+            equipment.ChangeItem(0, -1);
+
+        // Item functions
+        equipment.Fire();
+        equipment.AltFire();
+    }
+
 }

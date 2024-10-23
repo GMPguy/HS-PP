@@ -17,6 +17,11 @@ public class StaticController : MonoBehaviour {
 
     }
 
+    void Update () {
+        PlayerSystem.CustomUpdate();
+        UISystem.CustomUpdate();
+    }
+
     void LateUpdate () =>
         CameraSystem.CustomLateUpdate(Time.deltaTime);
 

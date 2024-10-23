@@ -4,6 +4,8 @@ using static Enums;
 [CreateAssetMenu(fileName = "New Item", menuName = "Configs/Item")]
 public class ItemConfig : ScriptableObject {
 
+    public Sprite ItemIcon;
+
     public string EnglishName, PolishName;
     public ItemType TypeOfItem = ItemType.Regular;
 

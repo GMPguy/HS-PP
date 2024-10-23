@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f3de8b0fc20e294ea0bf65dfce9b863, type: 3}
+  m_Name: Windowses
+  m_EditorClassIdentifier: 
+  Objects:
+  - {fileID: 5629746625107842594, guid: c201bf55d883a744cb7eb72a76050c51, type: 3}
+  - {fileID: 1090323815818602673, guid: 3fd9ccb8be19ad34d837e2e7898f4447, type: 3}

@@ -28,4 +28,14 @@ public static class Enums {
         Automatic
     }
 
+    public enum UImode {
+        MainMenu,
+        PausedMenu,
+        AliveMenu
+    }
+
+    public enum UIevent {
+        ItemSwitch
+    }
+
 }

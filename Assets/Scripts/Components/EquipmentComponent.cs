@@ -26,8 +26,7 @@ public class EquipmentComponent : MonoBehaviour {
     // Gun variables
     float recoil;
 
-    [SerializeField]
-    ItemConfig[] itemData;
+    public ItemConfig[] itemData;
 
     public void CustomUpdate () {
         cooldown -= cooldown > 0 ? Time.deltaTime : 0;
@@ -117,6 +116,8 @@ public class EquipmentComponent : MonoBehaviour {
 
         CameraSystem.FPPanimation(itemData[newID].Animation_Pullout);
         CameraSystem.FPPmodelSet(itemData[newID].EnglishName);
+
+        UISystem.UIEventCall(UIevent.ItemSwitch, 3);
     }
 
     void Start () {
