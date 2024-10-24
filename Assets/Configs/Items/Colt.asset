@@ -21,14 +21,92 @@ MonoBehaviour:
   PulloutTime: 1
   Animation_Pullout: Colt_Pullout
   Animation_Fire: Colt_Fire
+  Animation_Reload: Colt_Reload
   FireMode: 1
   Damage:
     x: 5
     y: 10
   Accuracy:
-    x: 1
-    y: 5
-  RecoilTime: 0.25
-  Recoil:
-    x: 5
-    y: 5
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0068529714
+      value: 0.0067663956
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.8066321
+      value: 1.2792715
+      inSlope: 0.022862718
+      outSlope: 0.022862718
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.14161824
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.99702734
+      value: 4.99298
+      inSlope: 18.343832
+      outSlope: 18.343832
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.12342566
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  RecoilTime: 0.5
+  Recoil: 5
+  RecoilPatterns:
+  - serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.00255009
+      value: 0.0026656564
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.0013303
+      value: 0.49680173
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 0
+    m_PostInfinity: 0
+    m_RotationOrder: 4
+  - serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.00255009
+      value: 0.0026656564
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1.0013303
+      value: -0.50061953
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 136
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 0
+    m_PostInfinity: 0
+    m_RotationOrder: 4
+  ReloadTime: 2
+  GunFire: {fileID: 4483237990282520272, guid: 786082c716e7710449de1de122585cb0, type: 3}

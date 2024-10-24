@@ -18,6 +18,7 @@ public class StaticController : MonoBehaviour {
     }
 
     void Update () {
+        WorldSystem.CustomUpdate();
         PlayerSystem.CustomUpdate();
         UISystem.CustomUpdate();
     }

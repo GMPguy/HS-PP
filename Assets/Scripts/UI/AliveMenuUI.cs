@@ -37,6 +37,8 @@ public class AliveMenuUI : UITemplate {
         if (!Player)
             return;
 
+        UISystem.LockCursor(Time.deltaTime * 4f);
+
         // Equipment
         EquipmentFunction();
 
@@ -116,7 +118,7 @@ public class AliveMenuUI : UITemplate {
 
         if (getItemB != null && getItemB.TypeOfItem == ItemType.Gun) {
             GunConfig cunConfig = (GunConfig)getItemB;
-            accuracy = Mathf.Lerp(cunConfig.Accuracy.x, cunConfig.Accuracy.y, equipment.Recoil);
+            accuracy = cunConfig.Accuracy.Evaluate( equipment.Recoil );
         }
 
         for (int ch = 0; ch < 4; ch++) {

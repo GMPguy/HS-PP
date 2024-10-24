@@ -11,9 +11,10 @@ public static class CameraSystem  {
     static public float turnX, turnY;
 
     // Camera references
-    static Camera mainCamera;
+    public static Camera MainCamera;
     static Transform cameraTransform;
 
+    public static Transform ItemSlimend;
     static Transform itemHeldModel;
     static Animator itemHeldAnim;
     static AudioSource itemheldSounds;
@@ -30,11 +31,11 @@ public static class CameraSystem  {
 
     public static void CustomLateUpdate () {
 
-        if (mainCamera == null) {
+        if (MainCamera == null) {
 
             // Spawn camera
             GameObject newCamera = Object.Instantiate(Resources.Load<GameObject>("Prefabs/MainCamera"));
-            mainCamera = newCamera.GetComponent<Camera>();
+            MainCamera = newCamera.GetComponent<Camera>();
             cameraTransform = newCamera.transform;
 
             // Spawn arm model
@@ -95,12 +96,16 @@ public static class CameraSystem  {
     /// If player is alive, and they change their item, we change the ItemHeldModel item model
     /// </summary>
     public static void FPPmodelSet (string modelName) {
-        //Assert.IsNull(itemHeldModel, "Tried to set model to a non-existing ItemHeldModel");
 
         // Find desired model, and set it's activity to either true or false
         for (int fm = 0; fm < itemHeldModel.GetChild(0).childCount; fm++) {
             GameObject checkModel = itemHeldModel.GetChild(0).GetChild(fm).gameObject;
             checkModel.SetActive(checkModel.name == modelName);
+
+            if (checkModel.transform.childCount > 0)
+                ItemSlimend = checkModel.transform.GetChild(0);
+            else
+                ItemSlimend = checkModel.transform;
         }
     }
 
@@ -141,7 +146,7 @@ public static class CameraSystem  {
         );
 
         // Field of view
-        mainCamera.fieldOfView = Mathf.Lerp(
+        MainCamera.fieldOfView = Mathf.Lerp(
             SettingsSystem.FOV,
             ZoomIn.x,
             ZoomIn.y

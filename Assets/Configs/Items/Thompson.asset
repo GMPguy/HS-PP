@@ -21,15 +21,46 @@ MonoBehaviour:
   PulloutTime: 1
   Animation_Pullout: Thompson_Pullout
   Animation_Fire: Thompson_Fire
+  Animation_Reload: Thompson_Reload
   FireMode: 2
   Damage:
     x: 5
     y: 10
   Accuracy:
-    x: 2
-    y: 10
-  RecoilTime: 0.2
-  Recoil: 5
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.38974
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.5001587
+      value: 1.1148586
+      inSlope: 2.8386834
+      outSlope: 2.8386834
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.32002112
+    - serializedVersion: 3
+      time: 0.8466797
+      value: 9.6836605
+      inSlope: 92.565674
+      outSlope: 92.565674
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.19747716
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  RecoilTime: 0.1
+  Recoil: 15
   RecoilPatterns:
   - serializedVersion: 2
     m_Curve:
@@ -63,3 +94,101 @@ MonoBehaviour:
     m_PreInfinity: 0
     m_PostInfinity: 0
     m_RotationOrder: 4
+  - serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0020383347
+      value: 0.0071934178
+      inSlope: -0.09217968
+      outSlope: -0.09217968
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.136157
+    - serializedVersion: 3
+      time: 0.6429661
+      value: -0.014764084
+      inSlope: -1.1322166
+      outSlope: -1.1322166
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.077691115
+      outWeight: 0.13606213
+    - serializedVersion: 3
+      time: 1.0027514
+      value: 0.026727319
+      inSlope: -0.07996528
+      outSlope: -0.07996528
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    m_PreInfinity: 0
+    m_PostInfinity: 0
+    m_RotationOrder: 4
+  - serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0020383347
+      value: 0.0071934178
+      inSlope: -0.09217968
+      outSlope: -0.09217968
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.136157
+    - serializedVersion: 3
+      time: 0.8263013
+      value: 0.029059658
+      inSlope: -0.9338664
+      outSlope: -0.9338664
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.12528645
+      outWeight: 1
+    - serializedVersion: 3
+      time: 0.99799067
+      value: -1.1397079
+      inSlope: -0.64248157
+      outSlope: -0.64248157
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    m_PreInfinity: 0
+    m_PostInfinity: 0
+    m_RotationOrder: 4
+  - serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0020383347
+      value: 0.0071934178
+      inSlope: -0.09217968
+      outSlope: -0.09217968
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.136157
+    - serializedVersion: 3
+      time: 0.6429661
+      value: -0.014764084
+      inSlope: -1.1322166
+      outSlope: -1.1322166
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.077691115
+      outWeight: 0.13606213
+    - serializedVersion: 3
+      time: 1.0027514
+      value: 0.026727319
+      inSlope: -0.07996528
+      outSlope: -0.07996528
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    m_PreInfinity: 0
+    m_PostInfinity: 0
+    m_RotationOrder: 4
+  ReloadTime: 2
+  GunFire: {fileID: 4483237990282520272, guid: 786082c716e7710449de1de122585cb0, type: 3}

@@ -13,6 +13,7 @@ public static class UISystem {
     static UImode prevPauseMode;
 
     // Misc
+    static float lockCursor = 0f;
     static float prevTimeScale = 0f;
 
     // References
@@ -64,6 +65,15 @@ public static class UISystem {
                     clearedWindowses.RemoveAt(fw);
                     clearedWindowses.TrimExcess();
                 }
+        }
+
+        // Hide cursor
+        if ((lockCursor -= Time.deltaTime) > 0f) {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        } else {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
         }
 
     }
@@ -124,6 +134,8 @@ public static class UISystem {
         foreach (UITemplate listeners in spawnedWindowses)
             listeners.EventTrigger(what, bonus);
     }
+
+    public static void LockCursor (float howLong) => lockCursor = howLong;
 
     /// <summary>
     /// Spawns a window from windowses config, by fetching them, by a name

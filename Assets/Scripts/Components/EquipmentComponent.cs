@@ -26,6 +26,7 @@ public class EquipmentComponent : MonoBehaviour {
     // Gun variables
     public float Recoil;
     float recoilPattern;
+    bool isReloading;
 
     public ItemConfig[] itemData;
 
@@ -37,6 +38,16 @@ public class EquipmentComponent : MonoBehaviour {
             Recoil = Mathf.Max(Recoil - Time.deltaTime, 0f);
 
         delay.x = Mathf.MoveTowards(delay.x, delay.y, Time.deltaTime);
+
+        // Check for current gun
+        if (CurrentItem >= 0 && CurrentItem < Equipment.Length){
+            Item item = Equipment[CurrentItem];
+            ItemConfig config = itemData[CurrentItem];
+
+            if (item.Acquired && config.TypeOfItem == ItemType.Gun)
+                ReloadGun();
+        }
+
     }
 
     /// <summary>
@@ -95,7 +106,7 @@ public class EquipmentComponent : MonoBehaviour {
         newID = (Equipment.Length + newID) % Equipment.Length;
 
         // If item is not acquired, prevent player from changing to it
-        if (!Equipment[newID].Acquired) {
+        if (newID < 0 || newID >= Equipment.Length || !Equipment[newID].Acquired) {
             if (what == 0)
                 return;
             else {
@@ -117,6 +128,8 @@ public class EquipmentComponent : MonoBehaviour {
         cooldown = Recoil = recoilPattern = 0f;
         delay = float2.zero;
 
+        isReloading = false;
+
         CameraSystem.FPPanimation(itemData[newID].Animation_Pullout);
         CameraSystem.FPPmodelSet(itemData[newID].EnglishName);
 
@@ -133,7 +146,8 @@ public class EquipmentComponent : MonoBehaviour {
             Equipment[gi] = new Item {
                 Acquired = true,
                 ConfigRef = config,
-                Ammo = config.MaxAmmo
+                Ammo = config.MaxAmmo,
+                SpareAmmo = config.MaxAmmo * 3
             };
         }
 
@@ -162,7 +176,7 @@ public class EquipmentComponent : MonoBehaviour {
 
             float yRecoil = Mathf.Lerp (
                 config.RecoilPatterns[(int)recoilPattern].Evaluate(Recoil),
-                config.RecoilPatterns[(int)(recoilPattern + 1f) % 1].Evaluate(Recoil),
+                config.RecoilPatterns[(int)(recoilPattern + 1) % config.RecoilPatterns.Length].Evaluate(Recoil),
                 recoilPattern % 1f
             );
 
@@ -174,6 +188,21 @@ public class EquipmentComponent : MonoBehaviour {
             ));
 
             recoilPattern = (recoilPattern + config.RecoilTime) % config.RecoilPatterns.Length;
+
+            float2 spread = (new float2(
+                Random.Range(-1f, 1f), 
+                Random.Range(-1f, 1f)
+            ) * config.Accuracy.Evaluate(Recoil)) / 90f;
+
+            WorldSystem.RaycastGunFire(
+                CameraSystem.MainCamera.transform.position, 
+                CameraSystem.MainCamera.transform.forward
+                    + CameraSystem.MainCamera.transform.right * spread.x
+                    + CameraSystem.MainCamera.transform.up * spread.y,
+                gameObject,
+                CameraSystem.ItemSlimend,
+                config
+            );
         }
     }
 
@@ -195,6 +224,38 @@ public class EquipmentComponent : MonoBehaviour {
             cooldown = 1f;
             delay = new float2(0f, .5f);
         }
+    }
+
+    /// <summary>
+    /// When gun is held, this function checks if it can be reloaded
+    /// </summary>
+    void ReloadGun () {
+
+        GunConfig currentGun = (GunConfig) itemData[CurrentItem];
+
+        if (!isReloading) {
+            // The gun is not being reloaded - check if it is possible to do so
+            if (Input.GetKey(KeyCode.R) && Equipment[CurrentItem].SpareAmmo > 0 && Equipment[CurrentItem].Ammo < itemData[CurrentItem].MaxAmmo) {
+                isReloading = true;
+
+                delay = new float2(0f, currentGun.ReloadTime);
+                cooldown = currentGun.ReloadTime;
+
+                CameraSystem.FPPanimation(currentGun.Animation_Reload);
+            }
+        } else {
+            // The gun is being reloaded - check if it's finished
+            if (delay.x >= delay.y) {
+                delay = float2.zero;
+                int ammoGet = Mathf.Min(itemData[CurrentItem].MaxAmmo - Equipment[CurrentItem].Ammo, Equipment[CurrentItem].SpareAmmo);
+
+                Equipment[CurrentItem].Ammo += ammoGet;
+                Equipment[CurrentItem].SpareAmmo -= ammoGet;
+
+                isReloading = false;
+            }
+        }
+
     }
 
 }
