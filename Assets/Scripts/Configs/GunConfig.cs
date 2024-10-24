@@ -11,6 +11,8 @@ public class GunConfig : ItemConfig {
     public float2 Damage;
     public float2 Accuracy;
     public float RecoilTime;
-    public float2 Recoil;
+
+    public float Recoil;
+    public AnimationCurve[] RecoilPatterns;
 
 }

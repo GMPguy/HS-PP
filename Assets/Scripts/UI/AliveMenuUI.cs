@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using static PlayerSystem;
 using static Enums;
+using static GameSystem;
 using TMPro;
 
 public class AliveMenuUI : UITemplate {
@@ -22,6 +23,10 @@ public class AliveMenuUI : UITemplate {
 
     [SerializeField]
     TMP_Text itemHeldText;
+
+    // Crosshair
+    [SerializeField]
+    RectTransform[] Crosshairs;
 
     public override void ClearUp() { Cleared = true; }
 
@@ -85,7 +90,7 @@ public class AliveMenuUI : UITemplate {
 
         // Item held
         EquipmentComponent.Item getItemA;
-        ItemConfig getItemB;
+        ItemConfig getItemB = null;
 
         itemHeldImage.color = new Color(1f, 1f, 1f, 0f);
         itemHeldText.text = "";
@@ -98,11 +103,27 @@ public class AliveMenuUI : UITemplate {
                 itemHeldImage.sprite = getItemB.ItemIcon;
                 itemHeldImage.color = new Color(1f, 1f, 1f, 1f);
 
-                itemHeldText.text = getItemB.TypeOfItem switch {
-                    ItemType.Gun => getItemA.Ammo.ToString(),
+                itemHeldText.text = GetString(getItemB.EnglishName, getItemB.PolishName);
+                itemHeldText.text += "\n" + getItemB.TypeOfItem switch {
+                    ItemType.Gun => getItemA.Ammo + " / " + getItemA.SpareAmmo,
                     _ => "",
                 };
             }
+        }
+
+        // Crosshairs
+        float accuracy = 0f;
+
+        if (getItemB != null && getItemB.TypeOfItem == ItemType.Gun) {
+            GunConfig cunConfig = (GunConfig)getItemB;
+            accuracy = Mathf.Lerp(cunConfig.Accuracy.x, cunConfig.Accuracy.y, equipment.Recoil);
+        }
+
+        for (int ch = 0; ch < 4; ch++) {
+            Crosshairs[ch].anchoredPosition = new Vector2(
+                accuracy * (1 - ch / 2), 
+                accuracy * (ch / 2)
+            ) * (ch % 2 == 1 ? -10 : 10);
         }
     }
 

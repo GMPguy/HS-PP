@@ -17,7 +17,7 @@ MonoBehaviour:
   PolishName: Thompson
   TypeOfItem: 1
   MaxAmmo: 30
-  Cooldown: 0.25
+  Cooldown: 0.1
   PulloutTime: 1
   Animation_Pullout: Thompson_Pullout
   Animation_Fire: Thompson_Fire
@@ -28,7 +28,38 @@ MonoBehaviour:
   Accuracy:
     x: 2
     y: 10
-  RecoilTime: 0.1
-  Recoil:
-    x: 5
-    y: 5
+  RecoilTime: 0.2
+  Recoil: 5
+  RecoilPatterns:
+  - serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: -0.0020383347
+      value: 0.0071934178
+      inSlope: -0.09217968
+      outSlope: -0.09217968
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.136157
+    - serializedVersion: 3
+      time: 0.8263013
+      value: 0.029059658
+      inSlope: -0.05353144
+      outSlope: -0.05353144
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.12528645
+      outWeight: 0.31848544
+    - serializedVersion: 3
+      time: 0.99799067
+      value: 1.0119644
+      inSlope: -0.07996528
+      outSlope: -0.07996528
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 1
+      outWeight: 0.33333334
+    m_PreInfinity: 0
+    m_PostInfinity: 0
+    m_RotationOrder: 4

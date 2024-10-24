@@ -52,8 +52,10 @@ public static class PlayerSystem {
         switch (playerState) {
 
             case PlayerState.Alive:
-                Movement();
-                EquipmentControl();
+                if (Time.timeScale > 0f) {
+                    Movement();
+                    EquipmentControl();
+                }
                 break;
 
             default:

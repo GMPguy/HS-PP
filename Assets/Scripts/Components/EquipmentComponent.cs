@@ -12,7 +12,7 @@ public class EquipmentComponent : MonoBehaviour {
     public class Item {
         public ItemConfig ConfigRef;
         public bool Acquired;
-        public int Ammo;
+        public int Ammo, SpareAmmo;
     }
 
     // Main variables
@@ -24,7 +24,8 @@ public class EquipmentComponent : MonoBehaviour {
     float2 delay;
 
     // Gun variables
-    float recoil;
+    public float Recoil;
+    float recoilPattern;
 
     public ItemConfig[] itemData;
 
@@ -32,7 +33,9 @@ public class EquipmentComponent : MonoBehaviour {
         cooldown -= cooldown > 0 ? Time.deltaTime : 0;
         pulloutCooldown -= pulloutCooldown > 0 ? Time.deltaTime : 0;
 
-        recoil -= cooldown <= 0 ? Time.deltaTime : 0;
+        if (cooldown <= 0f)
+            Recoil = Mathf.Max(Recoil - Time.deltaTime, 0f);
+
         delay.x = Mathf.MoveTowards(delay.x, delay.y, Time.deltaTime);
     }
 
@@ -111,7 +114,7 @@ public class EquipmentComponent : MonoBehaviour {
         CurrentItem = newID;
         pulloutCooldown = itemData[newID].PulloutTime;
 
-        cooldown = 0f;
+        cooldown = Recoil = recoilPattern = 0f;
         delay = float2.zero;
 
         CameraSystem.FPPanimation(itemData[newID].Animation_Pullout);
@@ -150,11 +153,27 @@ public class EquipmentComponent : MonoBehaviour {
         ((int)config.FireMode <= 1 && Input.GetButtonDown("Fire")) || 
         ((int)config.FireMode > 1 && Input.GetButton("Fire"));
 
-        if (firePermission) {
+        if (firePermission && item.Ammo > 0) {
             cooldown = config.Cooldown;
-            Debug.Log("Bang! " + recoil);
-            recoil = Mathf.Clamp01(recoil + config.RecoilTime);
+            Debug.Log("Bang! " + Recoil);
+            Recoil = Mathf.Clamp01(Recoil + config.RecoilTime);
+
+            item.Ammo--;
+
+            float yRecoil = Mathf.Lerp (
+                config.RecoilPatterns[(int)recoilPattern].Evaluate(Recoil),
+                config.RecoilPatterns[(int)(recoilPattern + 1f) % 1].Evaluate(Recoil),
+                recoilPattern % 1f
+            );
+
             CameraSystem.FPPanimation(config.Animation_Fire);
+            CameraSystem.ShiftCamera(new float3(
+                1.5f,
+                -config.Recoil * Recoil,
+                -config.Recoil * yRecoil
+            ));
+
+            recoilPattern = (recoilPattern + config.RecoilTime) % config.RecoilPatterns.Length;
         }
     }
 

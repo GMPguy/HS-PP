@@ -38,4 +38,9 @@ public static class Enums {
         ItemSwitch
     }
 
+    public enum Language {
+        English,
+        Polski
+    }
+
 }

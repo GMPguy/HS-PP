@@ -24,7 +24,11 @@ public static class CameraSystem  {
     static Vector3 camPosition;
     static Quaternion camRotation;
 
-    public static void CustomLateUpdate (float delta) {
+    // Shift and shake values
+    static float4 camShake = new float4(0f, 1f, 1f, 1f);
+    static float4 camShift = new float4(0f, 1f, 1f, 1f);
+
+    public static void CustomLateUpdate () {
 
         if (mainCamera == null) {
 
@@ -44,9 +48,14 @@ public static class CameraSystem  {
 
         } else {
 
+            // Shifts and shakes
+            camShift.x = Mathf.MoveTowards(camShift.x, 0f, Time.deltaTime);
+            camShake.x = Mathf.MoveTowards(camShake.x, 0f, Time.deltaTime);
+
+            // Triger camera logic functions
             switch (cameraType) {
                 case CameraLogic.FPP:
-                    FPPcamera(delta);
+                    FPPcamera(Time.deltaTime);
                     break;
                 default:
                     StaticCamera();
@@ -96,6 +105,27 @@ public static class CameraSystem  {
     }
 
     /// <summary>
+    /// This function sets new shift values. Camera shift, changes camera rotation by a few degrees,
+    /// and returns to basic forward direction overtime
+    /// </summary>
+    public static void ShiftCamera (float3 newShift) => camShift = new float4 (
+        newShift.x,
+        newShift.x,
+        newShift.y,
+        newShift.z
+    ); 
+
+    /// <summary>
+    /// This function sets new shake values. Camera shake, shakes camera's position overtime
+    /// </summary>
+    public static void ShakeCamera (float3 newShake) => camShake = new float4 (
+        newShake.x,
+        newShake.x,
+        newShake.y,
+        newShake.z
+    ); 
+
+    /// <summary>
     /// This function is used, when player is active
     /// </summary>
     static void FPPcamera (float delta) {
@@ -104,9 +134,9 @@ public static class CameraSystem  {
             return;
 
         // Look around
-        turnY += Input.GetAxis("Mouse X") * SettingsSystem.CameraSensitivity;
+        turnY += Input.GetAxis("Mouse X") * 100f * delta * SettingsSystem.CameraSensitivity;
         turnX = Mathf.Clamp(
-            turnX + Input.GetAxis("Mouse Y") * SettingsSystem.InvertedAxisY * SettingsSystem.CameraSensitivity,
+            turnX + Input.GetAxis("Mouse Y") * 100f * delta * SettingsSystem.InvertedAxisY * SettingsSystem.CameraSensitivity,
              -80f, 80f 
         );
 
@@ -117,10 +147,21 @@ public static class CameraSystem  {
             ZoomIn.y
         );
 
+        // Shake camera
+        Vector3 shake = new Vector3(
+            Mathf.Sin(Time.timeSinceLevelLoad * camShake.w),
+            Mathf.Sin(Time.timeSinceLevelLoad * camShake.w * 2f),
+            Mathf.Sin(Time.timeSinceLevelLoad * camShake.w / 2f)
+        ) * camShake.z * (camShake.x / camShake.y);
+
         // Set transforms
         cameraTransform.SetPositionAndRotation(
-            camTarget.position + Vector3.up * 1.75f, 
-            Quaternion.Euler(turnX, turnY, 0f)
+            camTarget.position + (Vector3.up * 1.75f) + shake, 
+            Quaternion.Euler(
+                turnX + camShift.z * (camShift.x / camShift.y), 
+                turnY + camShift.w * (camShift.x / camShift.y),
+                0f
+            )
         );
     }
 

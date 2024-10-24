@@ -1,4 +1,5 @@
 using UnityEngine;
+using static Enums;
 
 public static class SettingsSystem {
 
@@ -8,5 +9,8 @@ public static class SettingsSystem {
 
     /// <summary> -1 means moving mouse up, will move camera up </summary>
     public static int InvertedAxisY = -1;
+
+    // Misc
+    public static Language MainLanguage;
 
 }

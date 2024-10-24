@@ -13,7 +13,6 @@ public static class UISystem {
     static UImode prevPauseMode;
 
     // Misc
-    static float windowSwitch = 0f;
     static float prevTimeScale = 0f;
 
     // References
@@ -75,8 +74,6 @@ public static class UISystem {
     public static void ChangeMode (UImode newMode) {
 
         if (newMode != CurrentMode || newMode == UImode.PausedMenu) {
-
-            windowSwitch = 0f;
 
             switch (newMode) {
 

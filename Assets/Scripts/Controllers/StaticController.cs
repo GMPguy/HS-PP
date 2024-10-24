@@ -12,7 +12,7 @@ public class StaticController : MonoBehaviour {
             Destroy(gameObject);
         else {
             DontDestroyOnLoad(gameObject);
-            CameraSystem.CustomLateUpdate(0f);
+            CameraSystem.CustomLateUpdate();
         }
 
     }
@@ -23,6 +23,6 @@ public class StaticController : MonoBehaviour {
     }
 
     void LateUpdate () =>
-        CameraSystem.CustomLateUpdate(Time.deltaTime);
+        CameraSystem.CustomLateUpdate();
 
 }
