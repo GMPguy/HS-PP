@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abe9e8f7c8a2c8e4599b546e825feee2, type: 3}
+  m_Name: Garand
+  m_EditorClassIdentifier: 
+  ItemIcon: {fileID: 0}
+  EnglishName: Garand
+  PolishName: Garand
+  TypeOfItem: 1
+  MaxAmmo: 10
+  Cooldown: 0.1
+  PulloutTime: 1
+  Animation_Pullout: Garand_Pullout
+  Animation_Fire: Garand_Fire
+  Animation_Reload: Garand_Reload
+  FireMode: 1
+  Damage:
+    x: 15
+    y: 30
+  Accuracy:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.17513204
+      inSlope: -0.0498329
+      outSlope: -0.0498329
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.4844261
+      value: 0.15099168
+      inSlope: -0.337818
+      outSlope: -0.337818
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.121052064
+    - serializedVersion: 3
+      time: 1
+      value: 1.3774679
+      inSlope: 5.672063
+      outSlope: 5.672063
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.13199781
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  RecoilTime: 0.2
+  Recoil: 5
+  RecoilPatterns:
+  - serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0015961975
+      value: 0.00047039986
+      inSlope: -0.0033631895
+      outSlope: -0.0033631895
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.89992213
+      value: -0.0025508404
+      inSlope: -0.016877905
+      outSlope: -0.016877905
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.102502696
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.9984224
+      value: 0.011777163
+      inSlope: 0.14546159
+      outSlope: 0.14546159
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  ReloadTime: 2
+  GunFire: {fileID: 6471914818152155179, guid: ba1de2a2eb5054245814ca7b777d3d37, type: 3}

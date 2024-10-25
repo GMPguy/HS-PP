@@ -985,6 +985,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerController
       objectReference: {fileID: 0}
+    - target: {fileID: 2428618960898945275, guid: 99de204c62caaee48bc734bb43bcfd00, type: 3}
+      propertyPath: itemData.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2428618960898945275, guid: 99de204c62caaee48bc734bb43bcfd00, type: 3}
+      propertyPath: itemData.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: ca7a790981631994988271d79920be13, type: 2}
     - target: {fileID: 4896443031579949212, guid: 99de204c62caaee48bc734bb43bcfd00, type: 3}
       propertyPath: m_UseGravity
       value: 1

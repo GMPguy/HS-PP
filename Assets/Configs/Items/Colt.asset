@@ -17,7 +17,7 @@ MonoBehaviour:
   PolishName: Colt
   TypeOfItem: 1
   MaxAmmo: 8
-  Cooldown: 0.25
+  Cooldown: 0.1
   PulloutTime: 1
   Animation_Pullout: Colt_Pullout
   Animation_Fire: Colt_Fire
@@ -31,7 +31,7 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: -0.0068529714
-      value: 0.0067663956
+      value: 0.55968386
       inSlope: 0
       outSlope: 0
       tangentMode: 136
@@ -59,8 +59,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  RecoilTime: 0.5
-  Recoil: 5
+  RecoilTime: 0.25
+  Recoil: 10
   RecoilPatterns:
   - serializedVersion: 2
     m_Curve:
@@ -109,4 +109,4 @@ MonoBehaviour:
     m_PostInfinity: 0
     m_RotationOrder: 4
   ReloadTime: 2
-  GunFire: {fileID: 4483237990282520272, guid: 786082c716e7710449de1de122585cb0, type: 3}
+  GunFire: {fileID: 5081269332067412065, guid: 0180a46e8c80450469e4fc2262155f41, type: 3}

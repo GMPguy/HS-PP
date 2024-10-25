@@ -191,4 +191,4 @@ MonoBehaviour:
     m_PostInfinity: 0
     m_RotationOrder: 4
   ReloadTime: 2
-  GunFire: {fileID: 4483237990282520272, guid: 786082c716e7710449de1de122585cb0, type: 3}
+  GunFire: {fileID: 2761150541711733374, guid: 9c6c6156806c99d4aaafa73eabece5c0, type: 3}
