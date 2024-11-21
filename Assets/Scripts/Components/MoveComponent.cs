@@ -15,27 +15,28 @@ public class MovementComponent : MonoBehaviour {
 
     Rigidbody rig;
     CapsuleCollider col;
-    PhysicMaterial physMat;
+
+    [SerializeField]
+    LayerMask predictIgnore;
 
     void Start () {
         rig = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
-        physMat = col.material;
     }
 
     /// <summary>
     /// This function changes player's velocity on XZ axis
     /// </summary>
-    public void Slide (Vector2 inputAxis) {
-
-        physMat.bounciness = GroundDetector.Grounded ? 0f : 1f;
+    public void Slide (Vector2 inputAxis, float delta) {
 
         inputAxis = Vector2.ClampMagnitude(inputAxis, 1f);
+
+        float predictObby = Physics.CheckSphere(rig.position + Vector3.up + (rig.velocity * delta), .4f, predictIgnore) ? 0f : 1f;
         
         Vector3 newVelocity =
             ((inputAxis.x * transform.forward) +
             (inputAxis.y * transform.right)
-            ) * MaxSpeed;
+            ) * MaxSpeed * predictObby;
 
         newVelocity.y = rig.velocity.y;
 
@@ -57,8 +58,6 @@ public class MovementComponent : MonoBehaviour {
             Vector3 prevVelocity = rig.velocity;
             prevVelocity.y = JumpHeight; 
             rig.velocity = prevVelocity;
-
-            physMat.bounciness = 1f;
         }
     }
 

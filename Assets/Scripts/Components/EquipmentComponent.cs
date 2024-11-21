@@ -164,8 +164,8 @@ public class EquipmentComponent : MonoBehaviour {
         GunConfig config = (GunConfig)item.ConfigRef;
 
         bool firePermission = 
-        ((int)config.FireMode <= 1 && Input.GetButtonDown("Fire")) || 
-        ((int)config.FireMode > 1 && Input.GetButton("Fire"));
+        ((int)config.FireMode <= 1 && InputSystem.GetFire()) || 
+        ((int)config.FireMode > 1 && InputSystem.HoldFire());
 
         if (firePermission && item.Ammo > 0) {
             cooldown = config.Cooldown;
@@ -211,14 +211,21 @@ public class EquipmentComponent : MonoBehaviour {
     /// </summary>
     void Fire_Knife () {
         if (delay.x >= .5f) {
-            Debug.Log("Chop");
             delay = float2.zero;
+
+            WorldSystem.RaycastAttack(
+                CameraSystem.MainCamera.transform.position, 
+                CameraSystem.MainCamera.transform.forward,
+                10f,
+                2f,
+                gameObject
+            );
         }
 
         if (cooldown > 0f)
             return;
         
-        if (Input.GetButtonDown("Fire")) {
+        if (InputSystem.GetFire()) {
             int chooseAnimation  = (int)Random.Range(1f, 3.9f);
             CameraSystem.FPPanimation("Knife_Attack" + chooseAnimation);
             cooldown = 1f;
@@ -235,7 +242,7 @@ public class EquipmentComponent : MonoBehaviour {
 
         if (!isReloading) {
             // The gun is not being reloaded - check if it is possible to do so
-            if (Input.GetKey(KeyCode.R) && Equipment[CurrentItem].SpareAmmo > 0 && Equipment[CurrentItem].Ammo < itemData[CurrentItem].MaxAmmo) {
+            if (InputSystem.GetReload() && Equipment[CurrentItem].SpareAmmo > 0 && Equipment[CurrentItem].Ammo < itemData[CurrentItem].MaxAmmo) {
                 isReloading = true;
 
                 delay = new float2(0f, currentGun.ReloadTime);

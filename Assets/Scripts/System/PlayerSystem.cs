@@ -42,7 +42,10 @@ public static class PlayerSystem {
 
     }
 
-    public static void CustomUpdate () {
+    public static void CustomUpdate (float delta) {
+
+        if (!Player)
+            return;
 
         // If state was changed, trigger the state change function
         if (prevState != (int)playerState) 
@@ -53,7 +56,7 @@ public static class PlayerSystem {
 
             case PlayerState.Alive:
                 if (Time.timeScale > 0f) {
-                    Movement();
+                    Movement(delta);
                     EquipmentControl();
                 }
                 break;
@@ -82,18 +85,18 @@ public static class PlayerSystem {
     /// <summary>
     /// This function uses Input system, to control the movement
     /// </summary>
-    static void Movement() {
+    static void Movement(float delta) {
 
         Player.rotation = Quaternion.Euler(0f, CameraSystem.turnY, 0f);
 
         switch (move.CurrentMovementType) {
             case MovementType.Normal:
                 move.Slide( new Vector2(
-                    Input.GetAxis("Vertical"),
-                    Input.GetAxis("Horizontal")
-                ));
+                    InputSystem.GetVertical(),
+                    InputSystem.GetHorizontal()
+                ), delta);
 
-                if (Input.GetButton("Jump"))
+                if (InputSystem.GetJump())
                     move.Jump();
 
                 break;
@@ -107,20 +110,14 @@ public static class PlayerSystem {
     static void EquipmentControl() {
         equipment.CustomUpdate();
 
-        // Change item
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-            equipment.ChangeItem(0, 0);
-        else if (Input.GetKeyDown(KeyCode.Alpha2))
-            equipment.ChangeItem(1, 0);
-        else if (Input.GetKeyDown(KeyCode.Alpha3))
-            equipment.ChangeItem(2, 0);
-        else if (Input.GetKeyDown(KeyCode.Alpha4))
-            equipment.ChangeItem(3, 0);
-        else if (Input.GetKeyDown(KeyCode.Alpha5))
-            equipment.ChangeItem(4, 0);
-        else if (Input.mouseScrollDelta.y != 0f)
-            equipment.ChangeItem((int)Input.mouseScrollDelta.y, 1);
-        else if (Input.GetKeyDown(KeyCode.H))
+        for (int pc = 0; pc < 5; pc++)
+            if (InputSystem.GetItem(pc))
+                equipment.ChangeItem(pc, 0);
+
+        if (InputSystem.GetMouseScroll() > .25f)
+            equipment.ChangeItem((int)InputSystem.GetMouseScroll(), 1);
+        
+        if (InputSystem.GetHolster())
             equipment.ChangeItem(0, -1);
 
         // Item functions

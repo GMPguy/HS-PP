@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e83d0c0fa634a64488c87f05e5a8452, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Recall: 0
 --- !u!114 &8839470915555351351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -115,6 +116,9 @@ MonoBehaviour:
   MaxSpeed: 10
   JumpHeight: 10
   GroundDetector: {fileID: 5166006174126211313}
+  predictIgnore:
+    serializedVersion: 2
+    m_Bits: 183
 --- !u!114 &2428618960898945275
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -128,8 +132,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentItem: 0
-  pulloutCooldown: 0
-  cooldown: 0
+  Recoil: 0
   itemData:
   - {fileID: 11400000, guid: c526aa61e4526734d9478f1681f2c440, type: 2}
   - {fileID: 11400000, guid: 0f899b41cb673f8418c8a708e34edde4, type: 2}

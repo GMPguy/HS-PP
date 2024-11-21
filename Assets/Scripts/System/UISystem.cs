@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using static Enums;
 
 public static class UISystem {
@@ -22,10 +23,15 @@ public static class UISystem {
     static List<UITemplate> spawnedWindowses;
     static List<UITemplate> clearedWindowses;
 
+    public static EventSystem eventSystem;
+
     /// <summary>
     /// This function sets up a few variables
     /// </summary>
     public static void RecallCanvas (Transform ourCanvas, UImode defaultMode) {
+
+        // Find event system
+        eventSystem = GameObject.FindObjectOfType<EventSystem>();
 
         // If we already had Canvas, destroy it, and spawnedWindowses
         if (MainCanvas) 
@@ -68,7 +74,7 @@ public static class UISystem {
         }
 
         // Hide cursor
-        if ((lockCursor -= Time.deltaTime) > 0f) {
+        if ((lockCursor -= Time.unscaledDeltaTime) > 0f) {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         } else {

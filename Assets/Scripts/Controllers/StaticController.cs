@@ -13,13 +13,14 @@ public class StaticController : MonoBehaviour {
         else {
             DontDestroyOnLoad(gameObject);
             CameraSystem.CustomLateUpdate();
+            InputSystem.SetUp();
         }
 
     }
 
     void Update () {
         WorldSystem.CustomUpdate();
-        PlayerSystem.CustomUpdate();
+        PlayerSystem.CustomUpdate(Time.deltaTime);
         UISystem.CustomUpdate();
     }
 

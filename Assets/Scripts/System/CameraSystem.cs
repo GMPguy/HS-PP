@@ -139,9 +139,9 @@ public static class CameraSystem  {
             return;
 
         // Look around
-        turnY += Input.GetAxis("Mouse X") * 100f * delta * SettingsSystem.CameraSensitivity;
+        turnY += InputSystem.GetMouseX() * delta * SettingsSystem.CameraSensitivity;
         turnX = Mathf.Clamp(
-            turnX + Input.GetAxis("Mouse Y") * 100f * delta * SettingsSystem.InvertedAxisY * SettingsSystem.CameraSensitivity,
+            turnX + InputSystem.GetMosueY() * delta * SettingsSystem.InvertedAxisY * SettingsSystem.CameraSensitivity,
              -80f, 80f 
         );
 
