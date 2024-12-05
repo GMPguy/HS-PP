@@ -49,7 +49,7 @@ public class MainMenuUI : UITemplate {
 
     public override void UIUpdate() {}
 
-    public override void EventTrigger(UIevent what, int bonus) {}
+    public override void EventTrigger(UIevent what, int[] bonus) {}
 
     public void OnClick (int buttonID) {
 
@@ -88,10 +88,7 @@ public class MainMenuUI : UITemplate {
                 default:
                     Debug.LogError($"No OnClick() code for ButtonType {MenuButtons_Types[buttonID].Type}");
                     break;
-
             }
-
-            Debug.Log($"Button {buttonID} pressed, function {MenuButtons_Types[buttonID].Type}.");
         }
 
         UISystem.eventSystem.SetSelectedGameObject(null);

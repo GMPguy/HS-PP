@@ -1,19 +1,28 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TriggerComponent : MonoBehaviour {
     
     public bool Grounded = false;
 
-    public int Colliders = 0;
+    public List<Collider> Colliders;
 
-    void OnTriggerEnter () {
-        Colliders++;
-        Grounded = Colliders > 0;
+    void OnTriggerEnter (Collider col) {
+        Colliders.Add(col);
+        CheckGround();
     }
 
-    void OnTriggerExit () {
-        Colliders--;
-        Grounded = Colliders > 0;
+    void OnTriggerExit (Collider col) {
+        Colliders.Remove(col);
+        CheckGround();
+    }
+
+    void CheckGround () {
+        for (int c = Colliders.Count - 1; c >= 0; c--)
+            if (Colliders[c] == null)
+                Colliders.RemoveAt(c);
+
+        Grounded = Colliders.Count > 0;
     }
 
 }

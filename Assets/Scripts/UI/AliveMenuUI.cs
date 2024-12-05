@@ -7,6 +7,16 @@ using TMPro;
 
 public class AliveMenuUI : UITemplate {
 
+    // Health bar
+    [SerializeField]
+    Image healthBar;
+
+    [SerializeField]
+    GameObject damageBase;
+
+    [SerializeField]
+    RectTransform damageRoot;
+
     // Equipment
     [SerializeField]
     Image[] equipmentBG;
@@ -28,6 +38,21 @@ public class AliveMenuUI : UITemplate {
     [SerializeField]
     RectTransform[] Crosshairs;
 
+    // Grenades and bandages
+    [SerializeField]
+    Image Grenades_Image;
+
+    [SerializeField]
+    TMP_Text Grenades_Text;
+
+    [SerializeField]
+    Image Bandages_Image;
+
+    [SerializeField]
+    TMP_Text Bandages_Text;
+
+    int prevGrenades = -1, prevBandages = -1;
+
     public override void ClearUp() { Cleared = true; }
 
     public override void SetUp(int addition) { }
@@ -37,18 +62,61 @@ public class AliveMenuUI : UITemplate {
         if (!Player)
             return;
 
+        // Health bar
+        healthBar.fillAmount = Health / 100f;
+
         UISystem.LockCursor(Time.deltaTime * 4f);
+
+        // Clean up damage indicators
+        for (int cu = damageRoot.childCount - 1; cu > 0; cu--) {
+            Image quickImage = damageRoot.GetChild(cu).GetComponent<Image>();
+
+            if (quickImage.color.a > 0)
+                quickImage.color = new (1f, 1f, 1f, quickImage.color.a - (Time.deltaTime / 3f));
+            else
+                Destroy(quickImage.gameObject);
+        }
 
         // Equipment
         EquipmentFunction();
 
+        // Grenades and bandages
+        if (prevGrenades != equipment.Grenades) {
+            Grenades_Image.color = equipment.Grenades > 0 ? Color.white : Color.clear;
+            Grenades_Text.text = equipment.Grenades > 0 ? "x " + equipment.Grenades.ToString() : "";
+            prevGrenades = equipment.Grenades;
+        }
+
+        if (prevBandages != equipment.Bandages) {
+            Bandages_Image.color = equipment.Bandages > 0 ? Color.white : Color.clear;
+            Bandages_Text.text = equipment.Bandages > 0 ? "x " + equipment.Bandages.ToString() : "";
+            prevBandages = equipment.Bandages;
+        }
+
     }
 
-    public override void EventTrigger(UIevent what, int bonus) {
+    public override void EventTrigger(UIevent what, int[] bonus) {
 
         switch (what) {
             case UIevent.ItemSwitch:
-                EQhide = bonus;
+                EQhide = bonus[0];
+                break;
+            case UIevent.DamageFrom:
+                // Damage indicator
+                Vector3 getDamagePosition = new (
+                    bonus[0] / 100f,
+                    Player.position.y,
+                    bonus[2] / 100f
+                );
+
+                RectTransform newIndicator = Instantiate (damageBase).GetComponent<RectTransform>();
+                newIndicator.SetParent(damageRoot);
+                newIndicator.localScale = Vector3.one;
+                newIndicator.anchoredPosition = Vector2.zero;
+
+                newIndicator.GetComponent<Image>().color = Color.white;
+                float yAngle = -Vector3.SignedAngle(Player.forward, getDamagePosition - Player.position, Vector3.up);
+                newIndicator.eulerAngles = Vector3.forward * yAngle;
                 break;
         }
 

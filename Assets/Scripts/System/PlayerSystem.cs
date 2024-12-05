@@ -1,5 +1,7 @@
+using Unity.Mathematics;
 using UnityEngine;
 using static Enums;
+using Random=UnityEngine.Random;
 
 public static class PlayerSystem {
 
@@ -8,6 +10,8 @@ public static class PlayerSystem {
 
     static PlayerState playerState = PlayerState.Alive;
     static int prevState = -1;
+
+    public static float Health = 100f;
 
     // References
     public static MovementComponent move;
@@ -39,6 +43,34 @@ public static class PlayerSystem {
         GameObject.Destroy(Player);
         move = null;
         equipment = null;
+
+    }
+
+    /// <summary>
+    /// This function reduces health of the player, and creates effects based of it
+    /// </summary>
+    public static void DamagePlayer (float2 damage, Vector3 damagePos) {
+        
+        Health -= Random.Range(damage[0], damage[1]);
+
+        UISystem.UIEventCall(UIevent.DamageFrom, new []{
+            (int)(damagePos.x * 100f),
+            (int)(damagePos.y * 100f),
+            (int)(damagePos.z * 100f)
+        });
+
+        if (Health <= 0f)
+            KillPlayer();
+
+    }
+
+    public static void KillPlayer () {
+
+        if (playerState != PlayerState.Alive)
+            return;
+        
+        StateChange(PlayerState.Dead);
+        UISystem.ChangeMode(UImode.DeadMenu);
 
     }
 
@@ -78,6 +110,9 @@ public static class PlayerSystem {
         switch (newState) {
             case PlayerState.Alive:
                 CameraSystem.ChangeCamera(CameraLogic.FPP, Player);
+                break;
+            case PlayerState.Dead:
+                CameraSystem.ChangeCamera(CameraLogic.Dead, Player);
                 break;
         }
     }

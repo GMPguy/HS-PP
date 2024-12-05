@@ -23,6 +23,7 @@ public static class UISystem {
     static List<UITemplate> spawnedWindowses;
     static List<UITemplate> clearedWindowses;
 
+    public static List<CommentContainer> Comments;
     public static EventSystem eventSystem;
 
     /// <summary>
@@ -37,6 +38,8 @@ public static class UISystem {
         if (MainCanvas) 
             Object.Destroy(MainCanvas.gameObject);
 
+        Comments = new ();
+
         spawnedWindowses = new List<UITemplate>();
         clearedWindowses = new List<UITemplate>();
 
@@ -45,6 +48,10 @@ public static class UISystem {
             windowses = Resources.Load <ObjectsConfig> ("Configs/Windowses");
         
         MainCanvas = ourCanvas.transform;
+
+        // Sacred windowses
+        ClearWindow("all", true);
+        SpawnWindow("UI_Comments");
 
         ChangeMode(defaultMode);
     }
@@ -128,6 +135,18 @@ public static class UISystem {
 
                     break;
 
+                // This creates dead menu
+                case UImode.DeadMenu:
+
+                    allowedToPause = false;
+
+                    SpawnWindow("UI_DeadMenu");
+                    ClearWindow("UI_DeadMenu", true);
+
+                    CurrentMode = UImode.AliveMenu;
+
+                    break;
+
             }
         }
 
@@ -136,7 +155,7 @@ public static class UISystem {
     /// <summary>
     /// This function allows us to remotely call functions in spawnedWindows, without the need to reference them
     /// </summary>
-    public static void UIEventCall (UIevent what, int bonus = 0) {
+    public static void UIEventCall (UIevent what, int[] bonus) {
         foreach (UITemplate listeners in spawnedWindowses)
             listeners.EventTrigger(what, bonus);
     }
@@ -173,13 +192,19 @@ public static class UISystem {
     }
 
     /// <summary>
+    /// This function creates a new CommentContainer, and adds it to comments
+    /// </summary>
+    public static void AddComment (string text, float time, Color color) =>
+        Comments.Add(new(text, color, time));
+
+    /// <summary>
     /// Checks spawned windowses, and removes those whose name is windowName (or, those whose name is not windowname,
     /// if keep is true). Removed windowses get moved to clearedWindowses, where they await removal
     /// </summary>
     static void ClearWindow (string windowName, bool keep = false) {
 
         for (int find = 0; find < spawnedWindowses.Count; find++) {
-            if (spawnedWindowses[find]) {
+            if (spawnedWindowses[find] && !(spawnedWindowses[find].Sacred && windowName != "all")) {
                 string targetName = spawnedWindowses[find].gameObject.name;
 
                 if ( (!keep && targetName == windowName) || (keep && targetName != windowName) ) {
@@ -194,8 +219,18 @@ public static class UISystem {
             }
         }
 
-        spawnedWindowses.TrimExcess();
+    }
 
+    public class CommentContainer {
+        public string Text;
+        public Color TextColor;
+        public float TextTime;
+
+        public CommentContainer (string t, Color c, float f) {
+            Text = t;
+            TextColor = c;
+            TextTime = f;
+        }
     }
 
 }

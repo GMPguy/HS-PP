@@ -1,7 +1,6 @@
 using UnityEngine;
 using static Enums;
 using Unity.Mathematics;
-using UnityEngine.Assertions;
 
 public static class CameraSystem  {
 
@@ -9,6 +8,11 @@ public static class CameraSystem  {
     static public float2 ZoomIn;
     static CameraLogic cameraType = CameraLogic.FPP;
     static public float turnX, turnY;
+
+    // Camera switching variables
+    static float cameraSwitch;
+    static Vector3 prevCameraPosition;
+    static Quaternion prevCameraRotation;
 
     // Camera references
     public static Camera MainCamera;
@@ -58,6 +62,9 @@ public static class CameraSystem  {
                 case CameraLogic.FPP:
                     FPPcamera(Time.deltaTime);
                     break;
+                case CameraLogic.Dead:
+                    CameraDead(Time.deltaTime);
+                    break;
                 default:
                     StaticCamera();
                     break;
@@ -74,6 +81,11 @@ public static class CameraSystem  {
 
         cameraType = newType;
         camTarget = newTarget;
+
+        cameraSwitch = 0f;
+
+        prevCameraPosition = cameraTransform.position;
+        prevCameraRotation = cameraTransform.rotation;
 
         // RemoveItemHeldModel
         itemHeldModel.localScale = newType == CameraLogic.FPP ? Vector3.one : Vector3.zero;
@@ -168,6 +180,26 @@ public static class CameraSystem  {
                 0f
             )
         );
+    }
+
+    /// <summary>
+    /// This function is used, when player died
+    /// </summary>
+    static void CameraDead (float delta) {
+        cameraSwitch += delta;
+
+        if (cameraSwitch < 1f)
+            cameraTransform.position = Vector3.Lerp(
+                prevCameraPosition,
+                camTarget.position + (Vector3.up / 5f),
+                Mathf.Pow(cameraSwitch, 2f)
+            );
+        else if (cameraSwitch < 2f)
+            cameraTransform.rotation = Quaternion.Lerp(
+                Quaternion.Euler(prevCameraRotation.eulerAngles + Vector3.forward * 60f),
+                prevCameraRotation,
+                1f - Mathf.Pow(cameraSwitch - 1f, 2f)
+            );
     }
 
     /// <summary>

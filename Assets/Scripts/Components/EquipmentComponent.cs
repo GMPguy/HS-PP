@@ -15,6 +15,10 @@ public class EquipmentComponent : MonoBehaviour {
         public int Ammo, SpareAmmo;
     }
 
+    // Side items
+    public int Bandages;
+    public int Grenades;
+
     // Main variables
     public Item[] Equipment;
     public int CurrentItem = -1;
@@ -133,7 +137,7 @@ public class EquipmentComponent : MonoBehaviour {
         CameraSystem.FPPanimation(itemData[newID].Animation_Pullout);
         CameraSystem.FPPmodelSet(itemData[newID].EnglishName);
 
-        UISystem.UIEventCall(UIevent.ItemSwitch, 3);
+        UISystem.UIEventCall(UIevent.ItemSwitch, new[]{3});
     }
 
     void Start () {
@@ -144,7 +148,7 @@ public class EquipmentComponent : MonoBehaviour {
             ItemConfig config = itemData[gi];
 
             Equipment[gi] = new Item {
-                Acquired = true,
+                Acquired = false,
                 ConfigRef = config,
                 Ammo = config.MaxAmmo,
                 SpareAmmo = config.MaxAmmo * 3
@@ -169,7 +173,6 @@ public class EquipmentComponent : MonoBehaviour {
 
         if (firePermission && item.Ammo > 0) {
             cooldown = config.Cooldown;
-            Debug.Log("Bang! " + Recoil);
             Recoil = Mathf.Clamp01(Recoil + config.RecoilTime);
 
             item.Ammo--;

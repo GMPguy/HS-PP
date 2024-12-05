@@ -3,6 +3,7 @@ using static Enums;
 
 public abstract class UITemplate : MonoBehaviour {
 
+    public bool Sacred;
     public bool Cleared;
     protected float Lifetime;
     
@@ -14,7 +15,7 @@ public abstract class UITemplate : MonoBehaviour {
 
     abstract public void ClearUp ();
 
-    abstract public void EventTrigger (UIevent what, int bonus);
+    abstract public void EventTrigger (UIevent what, int[] bonus);
 
 }
 

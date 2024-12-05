@@ -13,7 +13,8 @@ public static class Enums {
 
     public enum CameraLogic {
         Static,
-        FPP
+        FPP,
+        Dead
     }
 
     public enum ItemType {
@@ -31,11 +32,13 @@ public static class Enums {
     public enum UImode {
         MainMenu,
         PausedMenu,
-        AliveMenu
+        AliveMenu,
+        DeadMenu
     }
 
     public enum UIevent {
-        ItemSwitch
+        ItemSwitch,
+        DamageFrom
     }
 
     public enum Language {
