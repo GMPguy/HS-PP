@@ -241,7 +241,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7741019852506162384, guid: 8b2bfabd3452bbf4fa138461447d2c6d, type: 3}
       propertyPath: ammo
-      value: 3
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7741019852506162384, guid: 8b2bfabd3452bbf4fa138461447d2c6d, type: 3}
       propertyPath: item
@@ -452,7 +452,7 @@ GameObject:
   - component: {fileID: 437347290}
   - component: {fileID: 437347289}
   m_Layer: 0
-  m_Name: PigulkaGwaltu
+  m_Name: KillPill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

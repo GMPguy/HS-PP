@@ -158,6 +158,11 @@ public static class PlayerSystem {
         // Item functions
         equipment.Fire();
         equipment.AltFire();
+
+        if (InputSystem.GetGrenade()) {
+            equipment.GrenadeThrow();
+            Debug.Log("Pressed G");
+        }
     }
 
 }

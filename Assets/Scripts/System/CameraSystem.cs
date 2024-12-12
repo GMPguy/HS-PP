@@ -16,7 +16,7 @@ public static class CameraSystem  {
 
     // Camera references
     public static Camera MainCamera;
-    static Transform cameraTransform;
+    public static Transform CameraTransform;
 
     public static Transform ItemSlimend;
     static Transform itemHeldModel;
@@ -40,14 +40,14 @@ public static class CameraSystem  {
             // Spawn camera
             GameObject newCamera = Object.Instantiate(Resources.Load<GameObject>("Prefabs/MainCamera"));
             MainCamera = newCamera.GetComponent<Camera>();
-            cameraTransform = newCamera.transform;
+            CameraTransform = newCamera.transform;
 
             // Spawn arm model
             GameObject newItem = Object.Instantiate(Resources.Load<GameObject>("Prefabs/ItemHeldModel"));
             itemHeldAnim = newItem.GetComponent<Animator>();
             itemheldSounds = newItem.GetComponent<AudioSource>();
             itemHeldModel = newItem.transform;
-            itemHeldModel.SetParent(cameraTransform);
+            itemHeldModel.SetParent(CameraTransform);
             itemHeldModel.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
             itemHeldSoundBank = Resources.Load<SoundBankConfig>("Configs/ItemHeldSounds");
 
@@ -84,8 +84,8 @@ public static class CameraSystem  {
 
         cameraSwitch = 0f;
 
-        prevCameraPosition = cameraTransform.position;
-        prevCameraRotation = cameraTransform.rotation;
+        prevCameraPosition = CameraTransform.position;
+        prevCameraRotation = CameraTransform.rotation;
 
         // RemoveItemHeldModel
         itemHeldModel.localScale = newType == CameraLogic.FPP ? Vector3.one : Vector3.zero;
@@ -172,7 +172,7 @@ public static class CameraSystem  {
         ) * camShake.z * (camShake.x / camShake.y);
 
         // Set transforms
-        cameraTransform.SetPositionAndRotation(
+        CameraTransform.SetPositionAndRotation(
             camTarget.position + (Vector3.up * 1.75f) + shake, 
             Quaternion.Euler(
                 turnX + camShift.z * (camShift.x / camShift.y), 
@@ -189,13 +189,13 @@ public static class CameraSystem  {
         cameraSwitch += delta;
 
         if (cameraSwitch < 1f)
-            cameraTransform.position = Vector3.Lerp(
+            CameraTransform.position = Vector3.Lerp(
                 prevCameraPosition,
                 camTarget.position + (Vector3.up / 5f),
                 Mathf.Pow(cameraSwitch, 2f)
             );
         else if (cameraSwitch < 2f)
-            cameraTransform.rotation = Quaternion.Lerp(
+            CameraTransform.rotation = Quaternion.Lerp(
                 Quaternion.Euler(prevCameraRotation.eulerAngles + Vector3.forward * 60f),
                 prevCameraRotation,
                 1f - Mathf.Pow(cameraSwitch - 1f, 2f)
@@ -206,6 +206,6 @@ public static class CameraSystem  {
     /// This function is used, when camera has nothing to work with
     /// </summary>
     static void StaticCamera () =>
-        cameraTransform.SetPositionAndRotation(camPosition, camRotation);
+        CameraTransform.SetPositionAndRotation(camPosition, camRotation);
 
 }

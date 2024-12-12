@@ -1,4 +1,5 @@
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Enums;
 using Random = UnityEngine.Random;
@@ -33,6 +34,7 @@ public class EquipmentComponent : MonoBehaviour {
     bool isReloading;
 
     public ItemConfig[] itemData;
+    [SerializeField] GameObject grenade;
 
     public void CustomUpdate () {
         cooldown -= cooldown > 0 ? Time.deltaTime : 0;
@@ -52,6 +54,23 @@ public class EquipmentComponent : MonoBehaviour {
                 ReloadGun();
         }
 
+    }
+
+    /// <summary>
+    /// This function checks if it is possible to throw grenade right now,
+    /// and does so if it is
+    /// </summary>
+    public void GrenadeThrow () {
+        if (Grenades <= 0)
+            return;
+
+
+        Debug.Log("Threw");
+
+        Grenades--;
+        Transform newNade = Instantiate(grenade).transform;
+        newNade.position = CameraSystem.CameraTransform.position + CameraSystem.CameraTransform.forward / 2f;
+        newNade.forward = CameraSystem.CameraTransform.forward;
     }
 
     /// <summary>

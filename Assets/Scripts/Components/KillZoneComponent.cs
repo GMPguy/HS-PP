@@ -1,5 +1,6 @@
 using Unity.Mathematics;
 using UnityEngine;
+using Random=UnityEngine.Random;
 
 public class DamageComponent : MonoBehaviour {
     [SerializeField]
@@ -23,7 +24,8 @@ public class DamageComponent : MonoBehaviour {
     }
 
     void Damage (Collision col) {
-        if (col.collider.CompareTag("Player"))
-            PlayerSystem.DamagePlayer(damage, transform.position);
+        if (col.collider.TryGetComponent<HitInterface>(out HitInterface hit))
+            hit.Hit(Random.Range(damage.x, damage.y), transform.position);
+            //PlayerSystem.DamagePlayer(damage, transform.position);
     }
 }

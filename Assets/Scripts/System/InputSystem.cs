@@ -21,6 +21,7 @@ public static class InputSystem {
     public static bool GetAltFire () => WasPressed(new (0, 4));
     public static bool GetHolster () => WasPressed(new (0, 5));
     public static bool GetReload () => WasPressed(new (0, 6));
+    public static bool GetGrenade () => WasPressed(new (0, 7));
 
     public static float GetMouseX () => FetchFloat(new (1, 0));
     public static float GetMosueY () => FetchFloat(new (1, 1));

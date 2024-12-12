@@ -4,38 +4,20 @@ using UnityEngine;
 public static class WorldSystem {
 
     // Main variables
-    static List<ExpirationComponent> expires;
     static bool setUp;
 
     // References
+    public static List<HitInterface> HitInterfaces = new ();
     static ObjectsConfig WorldEffects;
+    static GameObject explosion;
 
     public static void CustomUpdate () {
 
         if (!setUp) {
 
             WorldEffects = Resources.Load<ObjectsConfig> ("Configs/WorldEffects");
-            expires = new ();
+            explosion = Resources.Load<GameObject> ("Prefabs/Explosion");
             setUp = true;
-
-        } else {
-
-            // Clean objects with expiration component
-            if (expires.Count > 0) {
-                for (int k = 0; k < expires.Count; k++) {
-                    ExpirationComponent clean = expires[k];
-
-                    if (clean.Expire(Time.deltaTime)){
-                        GameObject begone = clean.gameObject;
-                        expires.RemoveAt(k);
-                        GameObject.Destroy(begone);
-
-                        k--;
-                    }
-                }
-                
-                expires.TrimExcess();
-            }
 
         }
 
@@ -49,7 +31,6 @@ public static class WorldSystem {
         GameObject newEffect = GameObject.Instantiate( WorldEffects.Fetch(effectName) );
         newEffect.transform.position = effectPosition;
         newEffect.transform.forward = effectRotation;
-        expires.Add(newEffect.GetComponent<ExpirationComponent>());
 
     }
 
@@ -62,7 +43,6 @@ public static class WorldSystem {
 
         GameObject newFire = GameObject.Instantiate( gun.GunFire );
         newFire.transform.SetPositionAndRotation(slimend.position, slimend.rotation);
-        expires.Add(newFire.GetComponent<ExpirationComponent>());
 
     }
 
@@ -74,11 +54,29 @@ public static class WorldSystem {
         if (Physics.Raycast(org, dir, out RaycastHit hit, distance))
             if (hit.collider.GetComponent<HitInterface>() != null && hit.collider.gameObject != Killer)
                 // Hit something with hit interface
-                hit.collider.GetComponent<HitInterface>().Hit();
+                hit.collider.GetComponent<HitInterface>().Hit(Damage, hit.point);
             else
                 // Hit the dirt
                 WorldEffect("GroundHit", hit.point, hit.normal);
 
+    }
+
+    /// <summary>
+    /// This function damages anything nearby, and creates an explosion object
+    /// </summary>
+    public static void Explode (Vector3 org, float Damage, float Radius) {
+        Transform boom = Object.Instantiate(explosion).transform;
+        boom.position = org + Vector3.up * (Radius / 2f);
+        boom.localScale = Vector3.one * Radius;
+
+        for (int hc = 0; hc < HitInterfaces.Count; hc++) {
+            Vector3 t = HitInterfaces[hc].GetObject().transform.position;
+            if (Vector3.Distance(org, t) < Radius)
+                HitInterfaces[hc].Hit(
+                    Mathf.Max((1f - (Vector3.Distance(org, t) / Radius)) * Damage, 0f),
+                    org
+                );
+        }
     }
 
 }

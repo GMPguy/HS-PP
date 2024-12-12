@@ -131,12 +131,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eaa863261ed8c8741bb104e9515b9e2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Bandages: 0
+  Grenades: 0
   CurrentItem: 0
   Recoil: 0
   itemData:
   - {fileID: 11400000, guid: c526aa61e4526734d9478f1681f2c440, type: 2}
   - {fileID: 11400000, guid: 0f899b41cb673f8418c8a708e34edde4, type: 2}
   - {fileID: 11400000, guid: d733d8e77f1ef684583931826adfa321, type: 2}
+  grenade: {fileID: 8824599478945996035, guid: 13a900b7966fa86458c1744743afbf68, type: 3}
 --- !u!1 &2183114494850347573
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,4 +207,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Grounded: 0
-  Colliders: 0
+  Colliders: []
