@@ -95,31 +95,19 @@ public class AliveMenuUI : UITemplate {
 
     }
 
-    public override void EventTrigger(UIevent what, int[] bonus) {
+    public void ItemSwitch (float factor) {
+        EQhide = factor;
+    }
 
-        switch (what) {
-            case UIevent.ItemSwitch:
-                EQhide = bonus[0];
-                break;
-            case UIevent.DamageFrom:
-                // Damage indicator
-                Vector3 getDamagePosition = new (
-                    bonus[0] / 100f,
-                    Player.position.y,
-                    bonus[2] / 100f
-                );
+    public void DamageIndicator (Vector3 pos) {
+        RectTransform newIndicator = Instantiate (damageBase).GetComponent<RectTransform>();
+        newIndicator.SetParent(damageRoot);
+        newIndicator.localScale = Vector3.one;
+        newIndicator.anchoredPosition = Vector2.zero;
 
-                RectTransform newIndicator = Instantiate (damageBase).GetComponent<RectTransform>();
-                newIndicator.SetParent(damageRoot);
-                newIndicator.localScale = Vector3.one;
-                newIndicator.anchoredPosition = Vector2.zero;
-
-                newIndicator.GetComponent<Image>().color = Color.white;
-                float yAngle = -Vector3.SignedAngle(Player.forward, getDamagePosition - Player.position, Vector3.up);
-                newIndicator.eulerAngles = Vector3.forward * yAngle;
-                break;
-        }
-
+        newIndicator.GetComponent<Image>().color = Color.white;
+        float yAngle = -Vector3.SignedAngle(Player.forward, pos - Player.position, Vector3.up);
+        newIndicator.eulerAngles = Vector3.forward * yAngle;
     }
 
     void EquipmentFunction () {

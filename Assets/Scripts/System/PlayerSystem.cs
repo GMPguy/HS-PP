@@ -20,7 +20,7 @@ public static class PlayerSystem {
     /// <summary>
     /// Use this function to set Player references pased on scene object
     /// </summary>
-    public static void RecallPlayer (Transform newPlayer) {
+    public static void RecallPlayer (Transform newPlayer, PlayerState defaultState) {
 
         if (Player)
             DisposePlayer();
@@ -29,6 +29,9 @@ public static class PlayerSystem {
 
         move = Player.GetComponent<MovementComponent>();
         equipment = Player.GetComponent<EquipmentComponent>();
+
+        StateChange(defaultState);
+        Health = 100f;
 
     }
 
@@ -40,7 +43,7 @@ public static class PlayerSystem {
         if (!Player)
             return;
 
-        GameObject.Destroy(Player);
+        Object.Destroy(Player);
         move = null;
         equipment = null;
 
@@ -53,11 +56,8 @@ public static class PlayerSystem {
         
         Health -= Random.Range(damage[0], damage[1]);
 
-        UISystem.UIEventCall(UIevent.DamageFrom, new []{
-            (int)(damagePos.x * 100f),
-            (int)(damagePos.y * 100f),
-            (int)(damagePos.z * 100f)
-        });
+        if (UISystem.TryGetAliveMenu(out AliveMenuUI ui))
+            ui.DamageIndicator(damagePos);
 
         if (Health <= 0f)
             KillPlayer();
@@ -159,10 +159,13 @@ public static class PlayerSystem {
         equipment.Fire();
         equipment.AltFire();
 
-        if (InputSystem.GetGrenade()) {
+        // Grenades
+        if (InputSystem.GetGrenade())
             equipment.GrenadeThrow();
-            Debug.Log("Pressed G");
-        }
+
+        // Bandages
+        if (InputSystem.GetBandage())
+            equipment.BandageUse();
     }
 
 }

@@ -61,16 +61,37 @@ public class EquipmentComponent : MonoBehaviour {
     /// and does so if it is
     /// </summary>
     public void GrenadeThrow () {
-        if (Grenades <= 0)
+        if (Grenades <= 0) {
+            UISystem.AddComment(GameSystem.GetString("No grenades!", "Brak granatów!"), 3f, Color.red);
             return;
-
-
-        Debug.Log("Threw");
+        }
 
         Grenades--;
         Transform newNade = Instantiate(grenade).transform;
         newNade.position = CameraSystem.CameraTransform.position + CameraSystem.CameraTransform.forward / 2f;
         newNade.forward = CameraSystem.CameraTransform.forward;
+
+        CameraSystem.FPPanimation("GrenadeThrow");
+    }
+
+    /// <summary>
+    /// This function checks if it is possible to use a bandage right now,
+    /// and does so if it is
+    /// </summary>
+    public void BandageUse () {
+        if (Bandages <= 0) {
+            UISystem.AddComment(GameSystem.GetString("No bandages!", "Brak bandaży!"), 3f, Color.red);
+            return;
+        }
+
+        if (PlayerSystem.Health >= 100f)
+            return;
+
+         Bandages--;
+         PlayerSystem.Health = 100f;
+         CameraSystem.FPPanimation("BandageUse");
+
+         UISystem.FlashImage(Color.green, new (.5f, .5f));
     }
 
     /// <summary>
@@ -156,7 +177,9 @@ public class EquipmentComponent : MonoBehaviour {
         CameraSystem.FPPanimation(itemData[newID].Animation_Pullout);
         CameraSystem.FPPmodelSet(itemData[newID].EnglishName);
 
-        UISystem.UIEventCall(UIevent.ItemSwitch, new[]{3});
+        if (UISystem.TryGetAliveMenu(out AliveMenuUI ui))
+            ui.ItemSwitch(3f);
+
     }
 
     void Start () {

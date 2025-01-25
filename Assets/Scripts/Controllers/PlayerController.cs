@@ -1,13 +1,17 @@
 using UnityEngine;
+using static Enums;
 
 public class PlayerController : MonoBehaviour, HitInterface {
 
     [SerializeField]
     bool recall = false;
 
+    [SerializeField]
+    PlayerState DefaultState;
+
     void Start () {
         if (recall) {
-            PlayerSystem.RecallPlayer(transform);
+            PlayerSystem.RecallPlayer(transform, DefaultState);
             ListHI();
         }
     }

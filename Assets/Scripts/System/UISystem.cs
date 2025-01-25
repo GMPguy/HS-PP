@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Unity.Mathematics;
 using static Enums;
 
 public static class UISystem {
@@ -25,6 +26,19 @@ public static class UISystem {
 
     public static List<CommentContainer> Comments;
     public static EventSystem eventSystem;
+
+    // Specific window reference
+    static AliveMenuUI aliveMenuUI;
+    public static bool TryGetAliveMenu (out AliveMenuUI ui) {
+        ui = aliveMenuUI;
+        return ui;
+    }
+
+    static CommentsMenuUI commentsMenuUI;
+    public static bool TryGetCommentMenu (out CommentsMenuUI ui) {
+        ui = commentsMenuUI;
+        return ui;
+    }
 
     /// <summary>
     /// This function sets up a few variables
@@ -76,7 +90,6 @@ public static class UISystem {
                 else {
                     GameObject.Destroy(clearedWindowses[fw].gameObject);
                     clearedWindowses.RemoveAt(fw);
-                    clearedWindowses.TrimExcess();
                 }
         }
 
@@ -99,6 +112,18 @@ public static class UISystem {
         if (newMode != CurrentMode || newMode == UImode.PausedMenu) {
 
             switch (newMode) {
+
+                // This is triggered whenever scene loading is initialized
+                case UImode.LoadMenu:
+
+                    allowedToPause = false;
+                    SpawnWindow("UI_LoadMenu", 1);
+                    ClearWindow("UI_LoadMenu", true);
+
+                    CurrentMode = UImode.LoadMenu;
+                    Time.timeScale = 0f;
+
+                    break;
 
                 // This can either turn on or off a pause menu
                 case UImode.PausedMenu:
@@ -132,6 +157,7 @@ public static class UISystem {
                     ClearWindow("UI_AliveMenu", true);
 
                     CurrentMode = UImode.AliveMenu;
+                    Time.timeScale = 1f;
 
                     break;
 
@@ -150,14 +176,6 @@ public static class UISystem {
             }
         }
 
-    }
-
-    /// <summary>
-    /// This function allows us to remotely call functions in spawnedWindows, without the need to reference them
-    /// </summary>
-    public static void UIEventCall (UIevent what, int[] bonus) {
-        foreach (UITemplate listeners in spawnedWindowses)
-            listeners.EventTrigger(what, bonus);
     }
 
     public static void LockCursor (float howLong) => lockCursor = howLong;
@@ -183,6 +201,15 @@ public static class UISystem {
 
                 newWindow.GetComponent<UITemplate>().SetUp(addition);
 
+                switch (windowName) {
+                    case "UI_AliveMenu":
+                        aliveMenuUI = newWindow.GetComponent<AliveMenuUI>();
+                        break;
+                    case "UI_Comments":
+                        commentsMenuUI = newWindow.GetComponent<CommentsMenuUI>();
+                        break;
+                }
+
                 break;
             }
             else if (spawnedWindowses[find].gameObject.name == windowName)
@@ -197,6 +224,11 @@ public static class UISystem {
     public static void AddComment (string text, float time, Color color) =>
         Comments.Add(new(text, color, time));
 
+    public static void FlashImage (Color color, float2 time, int importance = 0) {
+        if (TryGetCommentMenu(out CommentsMenuUI ui))
+            ui.FlashTheImage(color, time, importance);
+    }
+
     /// <summary>
     /// Checks spawned windowses, and removes those whose name is windowName (or, those whose name is not windowname,
     /// if keep is true). Removed windowses get moved to clearedWindowses, where they await removal
@@ -208,8 +240,14 @@ public static class UISystem {
                 string targetName = spawnedWindowses[find].gameObject.name;
 
                 if ( (!keep && targetName == windowName) || (keep && targetName != windowName) ) {
-                    clearedWindowses.Add(spawnedWindowses[find]);
-                    spawnedWindowses.RemoveAt(find);
+
+                    if (spawnedWindowses[find].InstantDestroyOnClear) {
+                        GameObject.Destroy(spawnedWindowses[find].gameObject);
+                        spawnedWindowses.RemoveAt(find);
+                    } else {
+                        clearedWindowses.Add(spawnedWindowses[find]);
+                        spawnedWindowses.RemoveAt(find);
+                    }
 
                     find--;
 

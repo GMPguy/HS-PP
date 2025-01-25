@@ -12,7 +12,6 @@ public class GrenadeComponent : MonoBehaviour {
 
     void OnDestroy () {
         WorldSystem.Explode(transform.position, 100f, 4f);
-        Debug.Log("Boom!");
     }
 
 }

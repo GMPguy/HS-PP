@@ -4,7 +4,7 @@ using static Enums;
 public abstract class UITemplate : MonoBehaviour {
 
     public bool Sacred;
-    public bool Cleared;
+    public bool Cleared, InstantDestroyOnClear;
     protected float Lifetime;
     
     public void UpdateLifetime () => Lifetime += Time.deltaTime;
@@ -14,8 +14,6 @@ public abstract class UITemplate : MonoBehaviour {
     abstract public void UIUpdate ();
 
     abstract public void ClearUp ();
-
-    abstract public void EventTrigger (UIevent what, int[] bonus);
 
 }
 

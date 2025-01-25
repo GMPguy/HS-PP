@@ -22,6 +22,7 @@ public class StaticController : MonoBehaviour {
         WorldSystem.CustomUpdate();
         PlayerSystem.CustomUpdate(Time.deltaTime);
         UISystem.CustomUpdate();
+        SceneManagmentSystem.CustomUpdate();
     }
 
     void LateUpdate () =>

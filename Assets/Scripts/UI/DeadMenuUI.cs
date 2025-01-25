@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class DeadMenuUI : UITemplate {
@@ -30,8 +31,6 @@ public class DeadMenuUI : UITemplate {
     float Progress;
 
     public override void ClearUp() {}
-
-    public override void EventTrigger(Enums.UIevent what, int[] bonus) {}
 
     public override void SetUp(int addition) {
         GameOverText.text = GameSystem.GetString(
@@ -68,4 +67,10 @@ public class DeadMenuUI : UITemplate {
         GameOverText.color = new (1f, 1f, 1f, Mathf.Clamp01(Progress - 2f));
 
     }
+
+    public static void RestartLevel () =>
+        SceneManagmentSystem.LoadScene("MainScene");
+
+    public static void BackToMenu () =>
+        SceneManagmentSystem.LoadScene("MenuScene");
 }

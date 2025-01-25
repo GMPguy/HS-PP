@@ -58,7 +58,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abc14099d143caa4daeea1da110cb27e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Sacred: 0
   Cleared: 0
+  InstantDestroyOnClear: 1
   MenuButtons_Transforms:
   - {fileID: 6646319414776390658}
   - {fileID: 4832115079502552013}

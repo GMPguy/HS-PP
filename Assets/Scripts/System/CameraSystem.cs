@@ -35,23 +35,7 @@ public static class CameraSystem  {
 
     public static void CustomLateUpdate () {
 
-        if (MainCamera == null) {
-
-            // Spawn camera
-            GameObject newCamera = Object.Instantiate(Resources.Load<GameObject>("Prefabs/MainCamera"));
-            MainCamera = newCamera.GetComponent<Camera>();
-            CameraTransform = newCamera.transform;
-
-            // Spawn arm model
-            GameObject newItem = Object.Instantiate(Resources.Load<GameObject>("Prefabs/ItemHeldModel"));
-            itemHeldAnim = newItem.GetComponent<Animator>();
-            itemheldSounds = newItem.GetComponent<AudioSource>();
-            itemHeldModel = newItem.transform;
-            itemHeldModel.SetParent(CameraTransform);
-            itemHeldModel.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
-            itemHeldSoundBank = Resources.Load<SoundBankConfig>("Configs/ItemHeldSounds");
-
-        } else {
+        if (MainCamera != null) {
 
             // Shifts and shakes
             camShift.x = Mathf.MoveTowards(camShift.x, 0f, Time.deltaTime);
@@ -70,7 +54,38 @@ public static class CameraSystem  {
                     break;
             }
 
+            // Reset arm animations
+            if (itemHeldAnim.GetCurrentAnimatorStateInfo(0).IsName("RestartAnimation")){
+                if (PlayerSystem.equipment.CurrentItem >= 0) {
+                    FPPanimation(PlayerSystem.equipment.itemData[PlayerSystem.equipment.CurrentItem].Animation_Pullout);
+                    FPPmodelSet(PlayerSystem.equipment.itemData[PlayerSystem.equipment.CurrentItem].EnglishName);
+                } else {
+                    FPPanimation("Template");
+                    FPPmodelSet("");
+                }
+            }
+
+
         }
+
+    }
+
+    /// <summary>
+    /// This function is triggered by scene's camera - it set's up the references
+    /// </summary>
+    public static void RecallCamera (GameObject newCamera) {
+
+        MainCamera = newCamera.GetComponent<Camera>();
+        CameraTransform = newCamera.transform;
+
+        // Spawn arm model
+        GameObject newItem = Object.Instantiate(Resources.Load<GameObject>("Prefabs/ItemHeldModel"));
+        itemHeldAnim = newItem.GetComponent<Animator>();
+        itemheldSounds = newItem.GetComponent<AudioSource>();
+        itemHeldModel = newItem.transform;
+        itemHeldModel.SetParent(CameraTransform);
+        itemHeldModel.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+        itemHeldSoundBank = Resources.Load<SoundBankConfig>("Configs/ItemHeldSounds");
 
     }
 
@@ -96,6 +111,7 @@ public static class CameraSystem  {
     /// If FPP camera is in use, this function will play ItemHeldModel's animation and sound
     /// </summary>
     public static void FPPanimation (string animationName, string animationSound = default) {
+
         itemHeldAnim.Play(animationName, 0, 0f);
 
         if (animationSound != default) {
@@ -147,9 +163,6 @@ public static class CameraSystem  {
     /// </summary>
     static void FPPcamera (float delta) {
 
-        if (!camTarget)
-            return;
-
         // Look around
         turnY += InputSystem.GetMouseX() * delta * SettingsSystem.CameraSensitivity;
         turnX = Mathf.Clamp(
@@ -173,7 +186,7 @@ public static class CameraSystem  {
 
         // Set transforms
         CameraTransform.SetPositionAndRotation(
-            camTarget.position + (Vector3.up * 1.75f) + shake, 
+            camTarget.position + (Vector3.up * 1.7f) + shake, 
             Quaternion.Euler(
                 turnX + camShift.z * (camShift.x / camShift.y), 
                 turnY + camShift.w * (camShift.x / camShift.y),
@@ -186,6 +199,9 @@ public static class CameraSystem  {
     /// This function is used, when player died
     /// </summary>
     static void CameraDead (float delta) {
+        if (!camTarget)
+            return;
+
         cameraSwitch += delta;
 
         if (cameraSwitch < 1f)

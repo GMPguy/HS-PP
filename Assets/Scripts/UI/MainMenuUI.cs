@@ -49,8 +49,6 @@ public class MainMenuUI : UITemplate {
 
     public override void UIUpdate() {}
 
-    public override void EventTrigger(UIevent what, int[] bonus) {}
-
     public void OnClick (int buttonID) {
 
         // Do the special code

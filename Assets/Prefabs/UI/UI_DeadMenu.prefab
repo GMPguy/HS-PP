@@ -357,7 +357,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 5752035109350987404}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 679764130617964357}
+        m_TargetAssemblyTypeName: DeadMenuUI, Assembly-CSharp
+        m_MethodName: RestartLevel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5628826647154938851
 GameObject:
   m_ObjectHideFlags: 0
@@ -447,7 +459,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2189203110579027}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 679764130617964357}
+        m_TargetAssemblyTypeName: DeadMenuUI, Assembly-CSharp
+        m_MethodName: BackToMenu
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5786141936734074627
 GameObject:
   m_ObjectHideFlags: 0
@@ -709,7 +733,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95ef5381d9a91e34d8300a4580dec221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Sacred: 0
   Cleared: 0
+  InstantDestroyOnClear: 1
   GameOverText: {fileID: 9118036583234378293}
   GameOverBG: {fileID: 5515887328108411267}
   restartLevel: {fileID: 3907044371164296592}

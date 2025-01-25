@@ -1316,7 +1316,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28a835e4233148c4492b5ed03537b0d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Sacred: 0
   Cleared: 0
+  InstantDestroyOnClear: 1
   healthBar: {fileID: 8293012654542272631}
   damageBase: {fileID: 3354610160112269793}
   damageRoot: {fileID: 4599273479320697972}

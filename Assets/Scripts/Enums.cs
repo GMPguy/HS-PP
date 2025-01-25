@@ -33,7 +33,8 @@ public static class Enums {
         MainMenu,
         PausedMenu,
         AliveMenu,
-        DeadMenu
+        DeadMenu,
+        LoadMenu
     }
 
     public enum UIevent {
