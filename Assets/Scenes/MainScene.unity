@@ -1956,6 +1956,7 @@ MonoBehaviour:
   - {fileID: 1703546093}
   - {fileID: 1561665139}
   - {fileID: 655446234}
+  WoodHit: {fileID: 2533244971515635404, guid: b318aa3677fa3e444abe6278d635bbe5, type: 3}
 --- !u!54 &1898837811
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2233,6 +2234,75 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 99de204c62caaee48bc734bb43bcfd00, type: 3}
+--- !u!1001 &6208627331607043710
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1704012495862677058, guid: 958018d9f8cb9cc4985dd219aa133fa3, type: 3}
+      propertyPath: Health.x
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1704012495862677058, guid: 958018d9f8cb9cc4985dd219aa133fa3, type: 3}
+      propertyPath: Health.y
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1704012495862677058, guid: 958018d9f8cb9cc4985dd219aa133fa3, type: 3}
+      propertyPath: BloodSplat
+      value: 
+      objectReference: {fileID: 9004550902003244658, guid: 03f9931c2d790a643ba3dede19fbb034, type: 3}
+    - target: {fileID: 4838680672081960859, guid: 958018d9f8cb9cc4985dd219aa133fa3, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.2664845
+      objectReference: {fileID: 0}
+    - target: {fileID: 4838680672081960859, guid: 958018d9f8cb9cc4985dd219aa133fa3, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.857
+      objectReference: {fileID: 0}
+    - target: {fileID: 4838680672081960859, guid: 958018d9f8cb9cc4985dd219aa133fa3, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.0501671
+      objectReference: {fileID: 0}
+    - target: {fileID: 4838680672081960859, guid: 958018d9f8cb9cc4985dd219aa133fa3, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4838680672081960859, guid: 958018d9f8cb9cc4985dd219aa133fa3, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4838680672081960859, guid: 958018d9f8cb9cc4985dd219aa133fa3, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4838680672081960859, guid: 958018d9f8cb9cc4985dd219aa133fa3, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4838680672081960859, guid: 958018d9f8cb9cc4985dd219aa133fa3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4838680672081960859, guid: 958018d9f8cb9cc4985dd219aa133fa3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4838680672081960859, guid: 958018d9f8cb9cc4985dd219aa133fa3, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6224607751912270892, guid: 958018d9f8cb9cc4985dd219aa133fa3, type: 3}
+      propertyPath: m_Name
+      value: NPC_Soldier
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 958018d9f8cb9cc4985dd219aa133fa3, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2252,3 +2322,4 @@ SceneRoots:
   - {fileID: 437347293}
   - {fileID: 594778491}
   - {fileID: 1898837813}
+  - {fileID: 6208627331607043710}

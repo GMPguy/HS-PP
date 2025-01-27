@@ -20,3 +20,4 @@ MonoBehaviour:
   Cooldown: 1
   PulloutTime: 1
   Animation_Pullout: Knife_Pullout
+  Audio_Pullout: {fileID: 8300000, guid: c95cf1ecdd92436418d6e40b963398b8, type: 3}

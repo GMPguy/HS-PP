@@ -18,6 +18,9 @@ public class CrateComponent : MonoBehaviour, HitInterface {
     [SerializeField]
     GameObject[] Debris;
 
+    [SerializeField]
+    GameObject WoodHit;
+
     void Start () => ListHI();
     void OnDestroy () => UnlistHI();
 
@@ -27,6 +30,10 @@ public class CrateComponent : MonoBehaviour, HitInterface {
     public GameObject GetObject() => gameObject;
 
     public void Hit(float Damage, Vector3 position) {
+        Transform newHit = GameObject.Instantiate(WoodHit).transform;
+        newHit.position = position;
+        newHit.Rotate(Vector3.one * Random.Range(0f, 360f));
+
         if ((Health -= Damage) <= 0f) {
             MainCollider.enabled = false;
             Destroy(Rig);

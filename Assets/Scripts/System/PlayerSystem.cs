@@ -16,6 +16,7 @@ public static class PlayerSystem {
     // References
     public static MovementComponent move;
     public static EquipmentComponent equipment;
+    public static SoundBankComponent sounds;
 
     /// <summary>
     /// Use this function to set Player references pased on scene object

@@ -20,12 +20,13 @@ MonoBehaviour:
   Cooldown: 0.1
   PulloutTime: 1
   Animation_Pullout: Thompson_Pullout
+  Audio_Pullout: {fileID: 8300000, guid: f14016fa1faa5d14b90d120fcdcb5ae4, type: 3}
   Animation_Fire: Thompson_Fire
   Animation_Reload: Thompson_Reload
   FireMode: 2
   Damage:
-    x: 5
-    y: 10
+    x: 2
+    y: 5
   Accuracy:
     serializedVersion: 2
     m_Curve:

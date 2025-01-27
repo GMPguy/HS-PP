@@ -24,8 +24,8 @@ public static class InputSystem {
     public static bool GetGrenade () => WasPressed(new (0, 7));
     public static bool GetBandage () => WasPressed(new (0, 8));
 
-    public static float GetMouseX () => FetchFloat(new (1, 0));
-    public static float GetMosueY () => FetchFloat(new (1, 1));
+    public static float GetMouseX () => FetchFloat(new (1, 0)) * .5f * .1f;
+    public static float GetMosueY () => FetchFloat(new (1, 1)) * .5f * .1f;
     public static float GetMouseScroll () => FetchFloat(new (1, 2));
 
     public static bool GetItem (int itemID) => WasPressed(new (2, itemID));

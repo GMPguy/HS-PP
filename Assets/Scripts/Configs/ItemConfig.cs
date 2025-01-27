@@ -14,5 +14,6 @@ public class ItemConfig : ScriptableObject {
     public float PulloutTime;
 
     public string Animation_Pullout;
+    public AudioClip Audio_Pullout;
 
 }

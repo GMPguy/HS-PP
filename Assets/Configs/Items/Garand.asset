@@ -20,6 +20,7 @@ MonoBehaviour:
   Cooldown: 0.1
   PulloutTime: 1
   Animation_Pullout: Garand_Pullout
+  Audio_Pullout: {fileID: 8300000, guid: c95cf1ecdd92436418d6e40b963398b8, type: 3}
   Animation_Fire: Garand_Fire
   Animation_Reload: Garand_Reload
   FireMode: 1

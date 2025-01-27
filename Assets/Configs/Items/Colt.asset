@@ -20,6 +20,7 @@ MonoBehaviour:
   Cooldown: 0.1
   PulloutTime: 1
   Animation_Pullout: Colt_Pullout
+  Audio_Pullout: {fileID: 8300000, guid: c1cf9861a6bc3534083b235597b1adb3, type: 3}
   Animation_Fire: Colt_Fire
   Animation_Reload: Colt_Reload
   FireMode: 1

@@ -1,5 +1,4 @@
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 using static Enums;
 using Random = UnityEngine.Random;
@@ -35,6 +34,16 @@ public class EquipmentComponent : MonoBehaviour {
 
     public ItemConfig[] itemData;
     [SerializeField] GameObject grenade;
+
+    // References
+    [SerializeField]
+    SoundBankComponent EquipmentSounds;
+
+    [SerializeField]
+    AudioClip Audio_Reload;
+
+    [SerializeField]
+    AudioSource Audio_SwitchItem;
 
     public void CustomUpdate () {
         cooldown -= cooldown > 0 ? Time.deltaTime : 0;
@@ -177,6 +186,10 @@ public class EquipmentComponent : MonoBehaviour {
         CameraSystem.FPPanimation(itemData[newID].Animation_Pullout);
         CameraSystem.FPPmodelSet(itemData[newID].EnglishName);
 
+        Audio_SwitchItem.clip = itemData[newID].Audio_Pullout;
+        Audio_SwitchItem.pitch = Random.Range(.8f, 1f);
+        Audio_SwitchItem.Play();
+
         if (UISystem.TryGetAliveMenu(out AliveMenuUI ui))
             ui.ItemSwitch(3f);
 
@@ -294,6 +307,7 @@ public class EquipmentComponent : MonoBehaviour {
                 cooldown = currentGun.ReloadTime;
 
                 CameraSystem.FPPanimation(currentGun.Animation_Reload);
+                EquipmentSounds.PlayAudio(Audio_Reload, .5f);
             }
         } else {
             // The gun is being reloaded - check if it's finished

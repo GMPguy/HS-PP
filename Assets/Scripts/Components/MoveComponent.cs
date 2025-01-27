@@ -19,6 +19,23 @@ public class MovementComponent : MonoBehaviour {
     [SerializeField]
     LayerMask predictIgnore;
 
+    // Sounds
+    [SerializeField]
+    SoundBankComponent PlayerSounds;
+
+    [SerializeField]
+    AudioClip Audio_Jump;
+
+    [SerializeField]
+    AudioSource Audio_Footstep;
+
+    [SerializeField]
+    AudioClip[] Audio_Footsteps;
+
+    // Footsteps
+    Vector3 prevPos;
+    int currentFootstep;
+
     void Start () {
         rig = GetComponent<Rigidbody>();
         col = GetComponent<CapsuleCollider>();
@@ -45,6 +62,13 @@ public class MovementComponent : MonoBehaviour {
             GroundDetector.Grounded ? Time.deltaTime * 10f : Time.deltaTime
         );
 
+        // Footsteps
+        if (GroundDetector.Grounded && Vector3.Distance(prevPos, transform.position) > 1f && !Audio_Footstep.isPlaying) {
+            prevPos = transform.position;
+            Audio_Footstep.clip = Audio_Footsteps[currentFootstep];
+            Audio_Footstep.Play();
+            currentFootstep = (currentFootstep + 1) % Audio_Footsteps.Length;
+        }
     }
 
     /// <summary>
@@ -58,6 +82,8 @@ public class MovementComponent : MonoBehaviour {
             Vector3 prevVelocity = rig.velocity;
             prevVelocity.y = JumpHeight; 
             rig.velocity = prevVelocity;
+
+            PlayerSounds.PlayAudio(Audio_Jump);
         }
     }
 

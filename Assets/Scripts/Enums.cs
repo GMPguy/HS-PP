@@ -47,4 +47,17 @@ public static class Enums {
         Polski
     }
 
+    public enum AIthink {
+        None,
+        Patrol,
+        Fight,
+        Hunt,
+    }
+
+    public enum AIstate {
+        None,
+        Alive,
+        Dead
+    }
+
 }
