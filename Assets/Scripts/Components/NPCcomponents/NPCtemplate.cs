@@ -13,11 +13,12 @@ public abstract class NPCtemplate : MonoBehaviour, HitInterface {
     public AIthink DefaultMode;
     public AIthink CurrentThought;
 
-    protected Vector3 aiTargetPosition;
+    protected Vector3 movePosition, lookPosition, targetPosition;
     protected GameObject aiTarget;
     protected float focus;
 
     public abstract void CustomUpdate (float delta);
+    public abstract void Think ();
     public abstract void HitEffect (float damage, Vector3 position);
     public abstract void Dead ();
 

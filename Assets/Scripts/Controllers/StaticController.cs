@@ -14,6 +14,7 @@ public class StaticController : MonoBehaviour {
             DontDestroyOnLoad(gameObject);
             CameraSystem.CustomLateUpdate();
             InputSystem.SetUp();
+            NPCSystem.SetUp();
         }
 
     }
@@ -23,6 +24,7 @@ public class StaticController : MonoBehaviour {
         PlayerSystem.CustomUpdate(Time.deltaTime);
         UISystem.CustomUpdate();
         SceneManagmentSystem.CustomUpdate();
+        NPCSystem.CustomUpdate(Time.deltaTime);
     }
 
     void LateUpdate () =>
