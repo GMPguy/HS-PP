@@ -54,6 +54,10 @@ public static class Enums {
         Hunt,
     }
 
+    public enum AiAlertType {
+        EnemySpotted
+    }
+
     public enum AIstate {
         None,
         Alive,

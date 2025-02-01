@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 
 public class CrateComponent : MonoBehaviour, HitInterface {
@@ -21,6 +18,9 @@ public class CrateComponent : MonoBehaviour, HitInterface {
     [SerializeField]
     GameObject WoodHit;
 
+    [SerializeField]
+    GameObject[] Drops;
+
     void Start () => ListHI();
     void OnDestroy () => UnlistHI();
 
@@ -29,7 +29,7 @@ public class CrateComponent : MonoBehaviour, HitInterface {
     public void UnlistHI() => WorldSystem.HitInterfaces.Remove(this);
     public GameObject GetObject() => gameObject;
 
-    public void Hit(float Damage, Vector3 position) {
+    public void Hit(float Damage, Vector3 position, GameObject killer = null) {
         Transform newHit = GameObject.Instantiate(WoodHit).transform;
         newHit.position = position;
         newHit.Rotate(Vector3.one * Random.Range(0f, 360f));
@@ -45,6 +45,11 @@ public class CrateComponent : MonoBehaviour, HitInterface {
                 debrisRig.AddTorque(Vector3.one * Random.Range(-10f, 10f), ForceMode.VelocityChange);
                 Debris[d].AddComponent<BoxCollider>();
             }
+
+            // Drop something
+            int getDrop = (int) Random.Range(0f, Drops.Length - .1f);
+            Transform newDrop = Instantiate(Drops[getDrop]).transform;
+            newDrop.position = transform.position + Vector3.up / 3f;
 
             UnlistHI();
         }

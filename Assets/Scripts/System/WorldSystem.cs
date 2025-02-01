@@ -54,7 +54,7 @@ public static class WorldSystem {
         if (Physics.Raycast(org, dir, out RaycastHit hit, distance))
             if (hit.collider.GetComponent<HitInterface>() != null && hit.collider.gameObject != Killer)
                 // Hit something with hit interface
-                hit.collider.GetComponent<HitInterface>().Hit(Damage, hit.point);
+                hit.collider.GetComponent<HitInterface>().Hit(Damage, hit.point, Killer);
             else
                 // Hit the dirt
                 WorldEffect("GroundHit", hit.point, hit.normal);

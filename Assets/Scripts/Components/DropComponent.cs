@@ -28,7 +28,7 @@ public class DropComponent : MonoBehaviour {
                     for (int fi = 0; fi < equipment.Equipment.Length; fi++) {
                         if (equipment.Equipment[fi].ConfigRef == item) {
                             if (equipment.Equipment[fi].Acquired) {
-                                equipment.Equipment[fi].Ammo += ammo;
+                                equipment.Equipment[fi].SpareAmmo += ammo;
 
                                 UISystem.AddComment(
                                     GameSystem.GetString(item.EnglishName + " ammo +" + ammo, item.PolishName + " ammunicja +" + ammo),

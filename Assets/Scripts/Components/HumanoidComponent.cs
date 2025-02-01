@@ -12,7 +12,7 @@ public class HumanoidComponent : MonoBehaviour {
     // Start values
     public Texture[] Uniforms, Faces;
 
-    public void PlayAnim (string name) => AnimationController.Play(name, 1);
+    public void PlayAnim (string name) => AnimationController.Play(name, 1, 0f);
     public void ChangeState (string name) => AnimationController.Play(name, 0);
     public void ChangePace (float value) => AnimationController.SetFloat("Pace", value);
 

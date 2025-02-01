@@ -49,13 +49,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CurrentState: 1
   Health:
-    x: 20
-    y: 20
+    x: 25
+    y: 25
   IsFriendly: 0
+  AttackSpeed: 1
+  ReloadSpeed: 2
+  MaxAmmo: 5
   DefaultMode: 0
   CurrentThought: 0
-  BloodSplat: {fileID: 2533244971515635404, guid: b318aa3677fa3e444abe6278d635bbe5, type: 3}
+  CantMove: 0
+  MoveSpeeds:
+    x: 2
+    y: 5
+  LookSpeeds:
+    x: 90
+    y: 360
+  AimSpeed: 1
+  PatrolPoints: []
+  AnimationBank: Rifle
+  BloodSplat: {fileID: 9004550902003244658, guid: 03f9931c2d790a643ba3dede19fbb034, type: 3}
   Humanoid: {fileID: 3509054928838773609}
+  MainGun: {fileID: 11400000, guid: ca7a790981631994988271d79920be13, type: 2}
+  AttackDistance: 15
 --- !u!136 &4935109223036848675
 CapsuleCollider:
   m_ObjectHideFlags: 0
