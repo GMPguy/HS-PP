@@ -10,7 +10,7 @@ public abstract class NPCtemplate : MonoBehaviour, HitInterface {
     public bool IsFriendly;
 
     public float AttackSpeed, ReloadSpeed;
-    public int MaxAmmo;
+    public int MaxAmmo, SquadID;
 
     // AI thinking
     public AIthink DefaultMode;

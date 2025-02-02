@@ -55,6 +55,7 @@ MonoBehaviour:
   AttackSpeed: 1
   ReloadSpeed: 2
   MaxAmmo: 5
+  SquadID: 0
   DefaultMode: 0
   CurrentThought: 0
   CantMove: 0
@@ -64,13 +65,19 @@ MonoBehaviour:
   LookSpeeds:
     x: 90
     y: 360
+  DetectionSpeeds:
+    x: 25
+    y: 90
+    z: 2
   AimSpeed: 1
   PatrolPoints: []
   AnimationBank: Rifle
+  GuardPoint: {x: 0, y: 0, z: 0}
   BloodSplat: {fileID: 9004550902003244658, guid: 03f9931c2d790a643ba3dede19fbb034, type: 3}
   Humanoid: {fileID: 3509054928838773609}
   MainGun: {fileID: 11400000, guid: ca7a790981631994988271d79920be13, type: 2}
   AttackDistance: 15
+  Drops: []
 --- !u!136 &4935109223036848675
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -234,6 +241,14 @@ PrefabInstance:
     - target: {fileID: 2938137871425040374, guid: cb3593b68e5a7dd4f8d47450dfc8a622, type: 3}
       propertyPath: m_Name
       value: Humanoid
+      objectReference: {fileID: 0}
+    - target: {fileID: 8211859506042155528, guid: cb3593b68e5a7dd4f8d47450dfc8a622, type: 3}
+      propertyPath: m_CastShadows
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8211859506042155528, guid: cb3593b68e5a7dd4f8d47450dfc8a622, type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -115,8 +115,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CurrentMovementType: 1
-  MaxSpeed: 10
-  JumpHeight: 10
+  MaxSpeed: 5
+  JumpHeight: 5
   GroundDetector: {fileID: 5166006174126211313}
   predictIgnore:
     serializedVersion: 2

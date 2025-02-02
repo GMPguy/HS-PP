@@ -1,4 +1,5 @@
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 using static Enums;
 using Random=UnityEngine.Random;
@@ -8,9 +9,11 @@ public class NPCsoldierComponent : NPCtemplate {
     // Main variables
     public float2 MoveSpeeds;
     public float2 LookSpeeds;
+    public float3 DetectionSpeeds;
     public float AimSpeed;
     public Transform[] PatrolPoints;
     public string AnimationBank;
+    public Vector3 GuardPoint;
     int currentWaypoint;
     float movingPace;
 
@@ -24,13 +27,15 @@ public class NPCsoldierComponent : NPCtemplate {
 
     // Some ai stuff
     float prevThinkTime;
+    float scram;
     bool hasAimed;
     bool isReloading;
+    float spotTime;
 
     public override void CustomUpdate(float delta) {
 
         if (CantMove <= 0f) {
-            int momentum = focus > 0f && CurrentThought == AIthink.Fight ? 1 : 0;
+            int momentum = (focus > 0f && CurrentThought == AIthink.Fight) ? 1 : 0;
 
             // Movement
             Vector3 parallerPosition = movePosition;
@@ -39,9 +44,9 @@ public class NPCsoldierComponent : NPCtemplate {
             if (Vector3.Distance(rig.position, parallerPosition) > .1f) {
                 lookPosition = parallerPosition;
                 rig.MovePosition(Vector3.MoveTowards(rig.position, parallerPosition, MoveSpeeds[momentum] * delta));
-                movingPace = Mathf.Lerp(movingPace, 1f + momentum, delta);
+                movingPace = Mathf.Lerp(movingPace, .5f + (momentum / 2f), delta * 4f);
             } else
-                movingPace = Mathf.Lerp(movingPace, 0f, delta);
+                movingPace = Mathf.Lerp(movingPace, 0f, delta * 4f);
             
             Humanoid.ChangePace(movingPace);
 
@@ -60,6 +65,15 @@ public class NPCsoldierComponent : NPCtemplate {
         Transform splash = GameObject.Instantiate(BloodSplat).transform;
         splash.position = position;
         splash.Rotate(Vector3.one * Random.Range(0f, 360f));
+
+        // Scram to avoid damage
+        if (Random.Range(0f, 1f) < .2f) {
+            scram = 1f;
+            if (hasAimed) {
+                hasAimed = false;
+                Humanoid.PlayAnim(AnimationBank + "_AtEase");
+            }
+        }
     }
 
     public override void Dead() {
@@ -74,6 +88,9 @@ public class NPCsoldierComponent : NPCtemplate {
 
         // Drop
         int pickDrop = (int)Random.Range(0f, Drops.Length - .1f);
+        if (Drops[pickDrop] == null)
+            return;
+        
         Transform newDrop = Instantiate(Drops[pickDrop]).transform;
         newDrop.position = transform.position - Vector3.up / 2f;
     }
@@ -81,13 +98,26 @@ public class NPCsoldierComponent : NPCtemplate {
     public override void AIAlert (AiAlertType type, Vector3 targetPos = default, GameObject targetObj = null) {
 
         switch (type) {
-            case AiAlertType.EnemySpotted:
-                if (!targetObj)
+            case AiAlertType.EnemySpotted: case AiAlertType.EnemySpotted_Aid:
+                if (!targetObj || CurrentThought == AIthink.Fight)
                     return;
 
                 focus = 10f;
                 CurrentThought = AIthink.Fight;
                 aiTarget = targetObj;
+
+                // Scram if alerted by others
+                if (type == AiAlertType.EnemySpotted_Aid) {
+                    scram = Random.Range(1f, 3f);
+                    targetPosition = transform.position;
+                    return;
+                }
+
+                // Alert others if initial
+                for (int ff = 0; ff < NPCSystem.NPCList.Count; ff++)
+                    if (NPCSystem.NPCList[ff].SquadID == SquadID) {
+                        NPCSystem.NPCList[ff].AIAlert(AiAlertType.EnemySpotted_Aid, targetPos, targetObj);
+                    }
                 break;
         }
 
@@ -101,6 +131,7 @@ public class NPCsoldierComponent : NPCtemplate {
         switch(CurrentThought) {
             case AIthink.Patrol:
                 AI_Patrol(delta);
+                AI_LookForFoe(delta);
                 break;
             case AIthink.Fight:
                 AI_Combat(delta);
@@ -114,13 +145,23 @@ public class NPCsoldierComponent : NPCtemplate {
     /// </summary>
     void AI_Patrol (float delta) {
 
-        if (Vector3.Distance(rig.position, movePosition) < .2f) {
+        if (currentWaypoint == -1) {
+            currentWaypoint = 0;
+            movePosition = PatrolPoints[0].position;
+            focus = 1f;
+        }
+
+        targetPosition = PatrolPoints[currentWaypoint].position;
+        Vector3 parallerPos = targetPosition;
+        parallerPos.y = transform.position.y;
+        movePosition = PatrolPoints[currentWaypoint].position;
+
+        if (Vector3.Distance(rig.position, parallerPos) < 1f) {
             if ((focus -= delta) <= 0f) {
-                focus = Random.Range(1f, 5f);
+                focus = Random.Range(1f, 10f);
                 currentWaypoint = (currentWaypoint + 1) % PatrolPoints.Length;
             }
-        } else
-            movePosition = PatrolPoints[currentWaypoint].position;
+        }   
 
     }
 
@@ -148,6 +189,20 @@ public class NPCsoldierComponent : NPCtemplate {
             return;
         }
 
+        // Scram first
+        if ((scram -= delta) > 0f) {
+            Vector3 scramPos = targetPosition;
+            scramPos.y = transform.position.y;
+            movePosition = scramPos;
+
+            if (Vector3.Distance(transform.position, scramPos) < 1f) {
+                targetPosition = transform.position + new Vector3(
+                    Random.Range(-10f, 10f), 0f, Random.Range(-10f, 10f)
+                );
+            }
+            return;
+        }
+
         float closeUpDist = hasAimed ? AttackDistance * 1.25f : AttackDistance;
 
         if (CheckTarget(aiTarget, aiTarget.transform.position + Vector3.up * 1.5f, closeUpDist)) {
@@ -171,9 +226,12 @@ public class NPCsoldierComponent : NPCtemplate {
             if (Vector3.Angle(transform.forward, checkPos - transform.position) < 10f) {
 
                 if ((attackCooldown -= delta) <= 0f && currentAmmo > 0) {
+                    float spread = MainGun.Accuracy.Evaluate(Random.Range(0f, 1f));
+                    Vector3 spreadDir = (transform.right * Random.Range(-1f, 1f) + transform.up * Random.Range(-1f, 1f)) * spread;
+
                     WorldSystem.RaycastGunFire(
                         transform.position + Vector3.up, 
-                        aiTarget.transform.position - transform.position + Vector3.up, 
+                        aiTarget.transform.position - transform.position + Vector3.up + spreadDir,
                         gameObject, 
                         Humanoid.HandRoot, 
                         MainGun
@@ -210,11 +268,40 @@ public class NPCsoldierComponent : NPCtemplate {
 
     }
 
+    /// <summary>
+    /// This function is used to detect enemies
+    /// </summary>
+    void AI_LookForFoe (float delta) {
+
+        if (!IsFriendly) {
+            // Currently, only search for main player
+            if (PlayerSystem.Player == null) {
+                spotTime = 0f;
+                return;
+            }
+            
+            if (CheckTarget(PlayerSystem.Player.gameObject, PlayerSystem.Player.position + Vector3.up * 1.5f, DetectionSpeeds.x)) {
+                Vector3 checkPos = PlayerSystem.Player.position;
+                checkPos.y = transform.position.y;
+                if (Vector3.Angle(transform.forward, checkPos - transform.position) < DetectionSpeeds.y)
+                    if ((spotTime += delta) > DetectionSpeeds.z)
+                        AIAlert(AiAlertType.EnemySpotted, PlayerSystem.Player.position, PlayerSystem.Player.gameObject);
+            } else
+                spotTime = 0f;
+        }
+
+    }
+
     void Start () {
         ListHI();
         NPCSystem.NPCList.Add(this);
         rig = GetComponent<Rigidbody>();
         movePosition = lookPosition = transform.position;
+
+        currentAmmo = MaxAmmo;
+        lookPosition = GuardPoint;
+
+        Humanoid.ChangeState(AnimationBank);
     }
 
     void OnDestroy () {

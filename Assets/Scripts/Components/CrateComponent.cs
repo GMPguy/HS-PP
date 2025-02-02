@@ -44,10 +44,15 @@ public class CrateComponent : MonoBehaviour, HitInterface {
                 debrisRig.AddForce(Vector3.one * Random.Range(-10f, 10f), ForceMode.VelocityChange);
                 debrisRig.AddTorque(Vector3.one * Random.Range(-10f, 10f), ForceMode.VelocityChange);
                 Debris[d].AddComponent<BoxCollider>();
+                debrisRig.mass = 0f;
             }
 
             // Drop something
             int getDrop = (int) Random.Range(0f, Drops.Length - .1f);
+
+            if (Drops[getDrop] == null)
+                return;
+                
             Transform newDrop = Instantiate(Drops[getDrop]).transform;
             newDrop.position = transform.position + Vector3.up / 3f;
 

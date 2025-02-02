@@ -55,7 +55,8 @@ public static class Enums {
     }
 
     public enum AiAlertType {
-        EnemySpotted
+        EnemySpotted,
+        EnemySpotted_Aid
     }
 
     public enum AIstate {
