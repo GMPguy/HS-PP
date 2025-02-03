@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 public class HumanoidComponent : MonoBehaviour {
     
@@ -10,6 +11,7 @@ public class HumanoidComponent : MonoBehaviour {
     public SkinnedMeshRenderer HumanoidMesh;
 
     // Start values
+    public string CurrentStance, CurrentAnim;
     public Texture[] Uniforms, Faces;
 
     public void PlayAnim (string name) => AnimationController.Play(name, 1, 0f);
@@ -29,12 +31,18 @@ public class HumanoidComponent : MonoBehaviour {
     }
 
     void Start () {
+
+        if (CurrentStance != "")
+            ChangeState(CurrentStance);
+
+        if (CurrentAnim != "")
+            PlayAnim(CurrentAnim);
         
         if (Faces.Length > 0 || Uniforms.Length > 0)
             foreach (Material mat in HumanoidMesh.materials)
                 mat.SetTexture("_MainTex",
-                    (mat.name + " (Instance)") switch {
-                        "Soldier1" => Faces[(int)Random.Range(0, Faces.Length - .1f)],
+                    mat.name switch {
+                        "Soldier1 (Instance)" => Uniforms[(int)Random.Range(0, Uniforms.Length - .1f)],
                         _ => Faces[(int)Random.Range(0, Faces.Length - .1f)]
                     }
                 );

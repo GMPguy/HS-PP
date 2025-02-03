@@ -52,6 +52,8 @@ public static class Enums {
         Patrol,
         Fight,
         Hunt,
+        StareAtPlayer,
+        BreakDance
     }
 
     public enum AiAlertType {

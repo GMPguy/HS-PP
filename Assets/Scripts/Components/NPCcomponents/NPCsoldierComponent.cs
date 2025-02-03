@@ -67,8 +67,11 @@ public class NPCsoldierComponent : NPCtemplate {
         splash.Rotate(Vector3.one * Random.Range(0f, 360f));
 
         // Scram to avoid damage
-        if (Random.Range(0f, 1f) < .2f) {
+        if (Health.x > 0f && Random.Range(0f, 1f) < .2f) {
             scram = 1f;
+            targetPosition = transform.position + new Vector3 (
+                Random.Range(-10f, 10f), 0f, Random.Range(-10f, 10f)
+            );
             if (hasAimed) {
                 hasAimed = false;
                 Humanoid.PlayAnim(AnimationBank + "_AtEase");
@@ -136,6 +139,13 @@ public class NPCsoldierComponent : NPCtemplate {
             case AIthink.Fight:
                 AI_Combat(delta);
                 break;
+            case AIthink.StareAtPlayer:
+                if (PlayerSystem.Player)
+                    lookPosition = PlayerSystem.Player.position;
+                break;
+            case AIthink.BreakDance:
+                lookPosition = transform.position + transform.forward + transform.right;
+                break;
         }
         
     }
@@ -157,6 +167,7 @@ public class NPCsoldierComponent : NPCtemplate {
         movePosition = PatrolPoints[currentWaypoint].position;
 
         if (Vector3.Distance(rig.position, parallerPos) < 1f) {
+            movePosition = transform.position;
             if ((focus -= delta) <= 0f) {
                 focus = Random.Range(1f, 10f);
                 currentWaypoint = (currentWaypoint + 1) % PatrolPoints.Length;
@@ -262,7 +273,6 @@ public class NPCsoldierComponent : NPCtemplate {
             if (hasAimed) {
                 hasAimed = false;
                 Humanoid.PlayAnim(AnimationBank + "_AtEase");
-                Debug.Log("Lost the target");
             }
         }
 

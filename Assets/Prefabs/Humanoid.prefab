@@ -173,6 +173,8 @@ MonoBehaviour:
   HandRoot: {fileID: 3516240960069643158}
   HeadRoot: {fileID: 1302840479237828723}
   HumanoidMesh: {fileID: 8211859506042155528}
+  CurrentStance: 
+  CurrentAnim: 
   Uniforms: []
   Faces: []
 --- !u!4 &7146201980950267307 stripped
