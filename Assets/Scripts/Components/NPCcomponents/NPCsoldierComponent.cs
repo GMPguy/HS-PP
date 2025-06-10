@@ -18,6 +18,7 @@ public class NPCsoldierComponent : NPCtemplate {
     float movingPace;
 
     // References
+    public SpriteRenderer MinimapMarker;
     public GameObject BloodSplat;
     public HumanoidComponent Humanoid;
     public GunConfig MainGun;
@@ -86,6 +87,8 @@ public class NPCsoldierComponent : NPCtemplate {
         CapsuleCollider col = GetComponent<CapsuleCollider>();
         col.height = col.radius = .1f;
         col.center = Vector3.down * .8f;
+
+        MinimapMarker.color = Color.clear;
 
         NPCSystem.NPCList.Remove(this);
 
