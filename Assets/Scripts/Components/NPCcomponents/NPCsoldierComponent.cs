@@ -1,6 +1,7 @@
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using static Enums;
 using Random=UnityEngine.Random;
 
@@ -24,7 +25,7 @@ public class NPCsoldierComponent : NPCtemplate {
     public GunConfig MainGun;
     public float AttackDistance;
     public GameObject[] Drops;
-    Rigidbody rig;
+    public NavMeshAgent Agent;
 
     // Some ai stuff
     float prevThinkTime;
@@ -33,6 +34,8 @@ public class NPCsoldierComponent : NPCtemplate {
     bool isReloading;
     float spotTime;
 
+    Vector3 prevPos, moveDir;
+
     public override void CustomUpdate(float delta) {
 
         if (CantMove <= 0f) {
@@ -40,13 +43,13 @@ public class NPCsoldierComponent : NPCtemplate {
 
             // Movement
             Vector3 parallerPosition = movePosition;
-            movePosition.y = rig.position.y;
+            movePosition.y = transform.position.y;
+            Agent.destination = movePosition;
+            Agent.speed = MoveSpeeds[momentum];
 
-            if (Vector3.Distance(rig.position, parallerPosition) > .1f) {
-                lookPosition = parallerPosition;
-                rig.MovePosition(Vector3.MoveTowards(rig.position, parallerPosition, MoveSpeeds[momentum] * delta));
+            if (Vector3.Distance(transform.position, parallerPosition) > .1f)
                 movingPace = Mathf.Lerp(movingPace, .5f + (momentum / 2f), delta * 4f);
-            } else
+            else
                 movingPace = Mathf.Lerp(movingPace, 0f, delta * 4f);
             
             Humanoid.ChangePace(movingPace);
@@ -57,6 +60,12 @@ public class NPCsoldierComponent : NPCtemplate {
                 Quaternion.LookRotation(new Vector3(lookPosition.x, transform.position.y, lookPosition.z) - transform.position),
                 LookSpeeds[momentum] * delta
             );
+
+            // Get direction normal
+            if(prevPos != transform.position) {
+                moveDir = (transform.position - prevPos).normalized;
+                prevPos = transform.position;
+            }
         } else
             CantMove -= delta;
 
@@ -92,13 +101,15 @@ public class NPCsoldierComponent : NPCtemplate {
 
         NPCSystem.NPCList.Remove(this);
 
+        Agent.enabled = false;
+
         // Drop
         int pickDrop = (int)Random.Range(0f, Drops.Length - .1f);
         if (Drops[pickDrop] == null)
             return;
         
         Transform newDrop = Instantiate(Drops[pickDrop]).transform;
-        newDrop.position = transform.position - Vector3.up / 2f;
+        newDrop.position = transform.position;
     }
 
     public override void AIAlert (AiAlertType type, Vector3 targetPos = default, GameObject targetObj = null) {
@@ -167,9 +178,11 @@ public class NPCsoldierComponent : NPCtemplate {
         targetPosition = PatrolPoints[currentWaypoint].position;
         Vector3 parallerPos = targetPosition;
         parallerPos.y = transform.position.y;
-        movePosition = PatrolPoints[currentWaypoint].position;
 
-        if (Vector3.Distance(rig.position, parallerPos) < 1f) {
+        movePosition = PatrolPoints[currentWaypoint].position;
+        lookPosition = movePosition;
+
+        if (Vector3.Distance(transform.position, parallerPos) < 1f) {
             movePosition = transform.position;
             if ((focus -= delta) <= 0f) {
                 focus = Random.Range(1f, 10f);
@@ -208,6 +221,7 @@ public class NPCsoldierComponent : NPCtemplate {
             Vector3 scramPos = targetPosition;
             scramPos.y = transform.position.y;
             movePosition = scramPos;
+            lookPosition = scramPos;
 
             if (Vector3.Distance(transform.position, scramPos) < 1f) {
                 targetPosition = transform.position + new Vector3(
@@ -224,7 +238,7 @@ public class NPCsoldierComponent : NPCtemplate {
             targetPosition = aiTarget.transform.position + (aiTarget.transform.position - transform.position).normalized;
             movePosition = transform.position;
             lookPosition = targetPosition;
-            focus = 5f;
+            focus = 15f;
 
             // Take aim
             Vector3 checkPos = aiTarget.transform.position;
@@ -268,7 +282,8 @@ public class NPCsoldierComponent : NPCtemplate {
             }
         } else {
             // Enemy lost, find them
-            movePosition = targetPosition;
+            movePosition = aiTarget.transform.position;
+            lookPosition = transform.position + moveDir;
 
             if ((focus -= delta) <= 0f)
                 CurrentThought = DefaultMode;
@@ -308,7 +323,6 @@ public class NPCsoldierComponent : NPCtemplate {
     void Start () {
         ListHI();
         NPCSystem.NPCList.Add(this);
-        rig = GetComponent<Rigidbody>();
         movePosition = lookPosition = transform.position;
 
         currentAmmo = MaxAmmo;
