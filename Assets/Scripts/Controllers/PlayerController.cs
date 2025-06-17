@@ -9,9 +9,11 @@ public class PlayerController : MonoBehaviour, HitInterface {
     [SerializeField]
     PlayerState DefaultState;
 
+    public Camera MinimapCamera;
+
     void Start () {
         if (recall) {
-            PlayerSystem.RecallPlayer(transform, DefaultState);
+            PlayerSystem.RecallPlayer(transform, this, DefaultState);
             ListHI();
         }
     }

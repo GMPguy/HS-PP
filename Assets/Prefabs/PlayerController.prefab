@@ -103,6 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   recall: 0
   DefaultState: 0
+  MinimapCamera: {fileID: 8082532167827677858}
 --- !u!114 &8839470915555351351
 MonoBehaviour:
   m_ObjectHideFlags: 0

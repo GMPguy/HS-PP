@@ -74,6 +74,10 @@ public class MainMenuUI : UITemplate {
                     SoundVolume = (SoundVolume + 5) % 105;
                     SetMenuText();
                     break;
+                case ButtonType.Settings_MinimapFOV:
+                    MinimapArea = Mathf.Max((MinimapArea + 5f) % 50f, 10f);
+                    SetMenuText();
+                    break;
 
                 case ButtonType.Back:
                     MenuType main = UISystem.CurrentMode == UImode.PausedMenu ? MenuType.PauseMenu : MenuType.MainMenu;
@@ -116,6 +120,7 @@ public class MainMenuUI : UITemplate {
                 new (ButtonType.Settings_SoundVolume),
                 new (ButtonType.Settings_MusicVolume),
                 new (),
+                new (ButtonType.Settings_MinimapFOV),
                 new (ButtonType.Settings_Language),
             },
 
@@ -157,6 +162,7 @@ public class MainMenuUI : UITemplate {
                     ButtonType.Quit => GetString("Quit", "Wyjdź"),
 
                     ButtonType.Settings_Language => GetString("Change language", "Zmień język"),
+                    ButtonType.Settings_MinimapFOV => GetString("Minimap size: ", "Rozmiar minimapy: ") + MinimapArea,
                     ButtonType.Settings_MusicVolume => GetString("Music volume: ", "Głośność muzyki: ") + MusicVolume,
                     ButtonType.Settings_SoundVolume => GetString("Sound volume: ", "Głośność dźwięków: ") + SoundVolume,
 
@@ -199,6 +205,7 @@ public class MainMenuUI : UITemplate {
         Settings_Language,
         Settings_MusicVolume,
         Settings_SoundVolume,
+        Settings_MinimapFOV,
 
         Back,
 

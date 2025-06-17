@@ -17,11 +17,12 @@ public static class PlayerSystem {
     public static MovementComponent move;
     public static EquipmentComponent equipment;
     public static SoundBankComponent sounds;
+    public static Camera MinimapCamera;
 
     /// <summary>
     /// Use this function to set Player references pased on scene object
     /// </summary>
-    public static void RecallPlayer (Transform newPlayer, PlayerState defaultState) {
+    public static void RecallPlayer (Transform newPlayer, PlayerController controller, PlayerState defaultState) {
 
         if (Player)
             DisposePlayer();
@@ -30,6 +31,7 @@ public static class PlayerSystem {
 
         move = Player.GetComponent<MovementComponent>();
         equipment = Player.GetComponent<EquipmentComponent>();
+        MinimapCamera = controller.MinimapCamera;
 
         StateChange(defaultState);
         Health = 100f;
@@ -79,6 +81,10 @@ public static class PlayerSystem {
 
         if (!Player)
             return;
+
+        // Update minimap FOV
+        if (MinimapCamera.orthographicSize != SettingsSystem.MinimapArea)
+            MinimapCamera.orthographicSize = SettingsSystem.MinimapArea;
 
         // If state was changed, trigger the state change function
         if (prevState != (int)playerState) 

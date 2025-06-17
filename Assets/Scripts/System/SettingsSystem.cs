@@ -3,6 +3,7 @@ using static Enums;
 public static class SettingsSystem {
 
     // Camera
+    public static float MinimapArea = 15f;
     public static float FOV = 80f;
     public static float CameraSensitivity = 500f;
 
