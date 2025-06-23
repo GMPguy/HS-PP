@@ -61,6 +61,8 @@ public class CommentsMenuUI : UITemplate {
             FlashImage.color = flashColor;
         }
 
+        Debug.Log("AAAA");
+
     }
 
     /// <summary>

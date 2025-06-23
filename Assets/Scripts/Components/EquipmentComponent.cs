@@ -70,17 +70,18 @@ public class EquipmentComponent : MonoBehaviour {
     /// and does so if it is
     /// </summary>
     public void GrenadeThrow () {
+        if (pulloutCooldown > 0f)
+            return;
+
         if (Grenades <= 0) {
             UISystem.AddComment(GameSystem.GetString("No grenades!", "Brak granatów!"), 3f, Color.red);
             return;
         }
 
         Grenades--;
-        Transform newNade = Instantiate(grenade).transform;
-        newNade.position = CameraSystem.CameraTransform.position + CameraSystem.CameraTransform.forward / 2f;
-        newNade.forward = CameraSystem.CameraTransform.forward;
 
         CameraSystem.FPPanimation("GrenadeThrow");
+        pulloutCooldown = 1f;
     }
 
     /// <summary>

@@ -148,6 +148,31 @@ public static class UISystem {
 
                     break;
 
+                // This is the main menu. Go figure
+                case UImode.MainMenu:
+
+                    allowedToPause = false;
+
+                    SpawnWindow("UI_MainMenu", 0);
+                    ClearWindow("UI_MainMenu", true);
+
+                    Time.timeScale = 1f;
+                    CurrentMode = UImode.MainMenu;
+                    
+                    break;
+
+                // This menu can be accessed from main menu, it contains missions
+                case UImode.MissionMenu:
+
+                    allowedToPause = false;
+
+                    SpawnWindow("UI_MissionMenu", 0);
+                    ClearWindow("UI_MissionMenu", true);
+
+                    CurrentMode = UImode.MissionMenu;
+                    
+                    break;
+
                 // This creates all of our instruments and whatnot
                 case UImode.AliveMenu:
 

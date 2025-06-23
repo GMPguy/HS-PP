@@ -30,11 +30,13 @@ public static class Enums {
     }
 
     public enum UImode {
+        None,
         MainMenu,
         PausedMenu,
         AliveMenu,
         DeadMenu,
-        LoadMenu
+        LoadMenu,
+        MissionMenu
     }
 
     public enum UIevent {

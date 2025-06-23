@@ -11,6 +11,8 @@ public static class SceneManagmentSystem {
     public static void CustomUpdate () {
 
         if (sceneToLoad != "") {
+            NPCSystem.SetUp();
+
             if ((timeToLoad -= Time.unscaledDeltaTime) <= 0f) {
                 SceneManager.LoadScene(sceneToLoad);
                 sceneToLoad = "";

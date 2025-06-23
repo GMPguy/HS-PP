@@ -42,8 +42,8 @@ public class MainMenuUI : UITemplate {
         // Set up sub menus
         if (addition == 1)
             SetSubMenu(MenuType.PauseMenu);
-        //else
-        //    SetSubMenu(MenuType.MainMenu);
+        else
+            SetSubMenu(MenuType.MainMenu);
         
     }
 
@@ -55,6 +55,9 @@ public class MainMenuUI : UITemplate {
         if (buttonID < MenuButtons_Types.Length && MenuButtons_Types[buttonID].Active) {
             switch (MenuButtons_Types[buttonID].Type) {
 
+                case ButtonType.Play:
+                    UISystem.ChangeMode(UImode.MissionMenu);
+                    break;
                 case ButtonType.Resume:
                     UISystem.ChangeMode(UImode.PausedMenu);
                     break;
@@ -87,6 +90,10 @@ public class MainMenuUI : UITemplate {
                     });
                     break;
 
+                case ButtonType.Quit:
+                    SceneManagmentSystem.LoadScene("MenuScene");
+                    break;
+
                 default:
                     Debug.LogError($"No OnClick() code for ButtonType {MenuButtons_Types[buttonID].Type}");
                     break;
@@ -112,6 +119,14 @@ public class MainMenuUI : UITemplate {
                 new (ButtonType.Resume),
                 new (),
                 new (ButtonType.Text_Paused, false, false)
+            },
+
+            MenuType.MainMenu => new MenuButton[] {
+                new (ButtonType.Exit),
+                new (ButtonType.Settings),
+                new (ButtonType.Play),
+                new (),
+                new (ButtonType.Text_MainMenu, false, false)
             },
 
             MenuType.Settings => new MenuButton[] {
@@ -156,10 +171,12 @@ public class MainMenuUI : UITemplate {
             if (v < MenuButtons_Types.Length) {
                 MenuButtons_Text[v].text = MenuButtons_Types[v].Type switch {
                     ButtonType.Text_Paused => GetString("GAME PAUSED", "GRA ZAPAUZOWANA"),
+                    ButtonType.Text_MainMenu => GetString("MAIN MENU", "MENU GŁÓWNE"),
 
                     ButtonType.Resume => GetString("Resume", "Wznów"),
+                    ButtonType.Play => GetString("Play", "Graj"),
                     ButtonType.Settings => GetString("Settings", "Ustawienia"),
-                    ButtonType.Quit => GetString("Quit", "Wyjdź"),
+                    ButtonType.Quit or ButtonType.Exit => GetString("Quit", "Wyjdź"),
 
                     ButtonType.Settings_Language => GetString("Change language", "Zmień język"),
                     ButtonType.Settings_MinimapFOV => GetString("Minimap size: ", "Rozmiar minimapy: ") + MinimapArea,
@@ -199,7 +216,9 @@ public class MainMenuUI : UITemplate {
         None,
 
         Resume,
+        Play,
         Quit,
+        Exit,
         Settings,
 
         Settings_Language,
@@ -209,7 +228,8 @@ public class MainMenuUI : UITemplate {
 
         Back,
 
-        Text_Paused
+        Text_Paused,
+        Text_MainMenu
     }
     
 }

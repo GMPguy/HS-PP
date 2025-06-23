@@ -20,7 +20,10 @@ public static class CameraSystem  {
 
     public static Transform ItemSlimend;
     static Transform itemHeldModel;
+
+    public static ItemHeldComponent ItemHeld;
     static Animator itemHeldAnim;
+
     static AudioSource itemheldSounds;
     static SoundBankConfig itemHeldSoundBank;
 
@@ -80,7 +83,10 @@ public static class CameraSystem  {
 
         // Spawn arm model
         GameObject newItem = Object.Instantiate(Resources.Load<GameObject>("Prefabs/ItemHeldModel"));
+
         itemHeldAnim = newItem.GetComponent<Animator>();
+        ItemHeld = newItem.GetComponent<ItemHeldComponent>();
+
         itemheldSounds = newItem.GetComponent<AudioSource>();
         itemHeldModel = newItem.transform;
         itemHeldModel.SetParent(CameraTransform);
