@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Grenade: {fileID: 8824599478945996035, guid: 13a900b7966fa86458c1744743afbf68, type: 3}
+  Socket: {fileID: 4162113107998171908}
 --- !u!1 &1296144377246018335
 GameObject:
   m_ObjectHideFlags: 0
@@ -1195,6 +1196,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6abe4a178bf3ada49b161290883529f6, type: 3}
+--- !u!4 &4162113107998171908 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -897994662729340238, guid: 6abe4a178bf3ada49b161290883529f6, type: 3}
+  m_PrefabInstance: {fileID: 5353483964670036406}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5603001511053700701 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 6abe4a178bf3ada49b161290883529f6, type: 3}
